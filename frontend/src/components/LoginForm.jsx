@@ -11,13 +11,13 @@ function LoginForm() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState(null); // Para mensajes de éxito o error
-    const [isError, setIsError] = useState(false); // Para distinguir si el mensaje es error o éxito
+    const [message, setMessage] = useState(null);
+    const [isError, setIsError] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage(null); // Limpiar mensaje anterior
-        setIsError(false); // Resetear estado de error
+        setMessage(null);
+        setIsError(false);
 
         try {
             const res = await axios.post('http://localhost:3000/api/users/login', {
@@ -26,16 +26,15 @@ function LoginForm() {
             });
 
             setAuth({
-                user: username, // O res.data.username si tu API devuelve el nombre de usuario
+                user: username,
                 token: res.data.token
             });
 
             setMessage('Inicio de sesión exitoso. Redirigiendo...');
             setIsError(false);
-            // Pequeño retardo para que el usuario vea el mensaje de éxito antes de redirigir
             setTimeout(() => {
                 navigate('/');
-            }, 1500); // Redirige al home después de 1.5 segundos
+            }, 1500);
 
         } catch (err) {
             const errorMessage = err.response?.data?.error || 'Error en el inicio de sesión. Credenciales incorrectas.';
@@ -45,11 +44,9 @@ function LoginForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="login-form-container"> {/* Clase del contenedor del formulario */}
-            <h2 className="login-form-title">Iniciar Sesión</h2> {/* Clase del título */}
-
-            <div className="login-input-group"> {/* Agrupador para input si no quieres <br /> */}
-                {/* Puedes poner un <label> aquí si lo deseas para accesibilidad */}
+        <form onSubmit={handleSubmit} className="login-form-container">
+            <h2 className="login-form-title">Iniciar Sesión</h2>
+            <div className="login-input-group">
                 <input
                     type="text"
                     placeholder="Usuario"
@@ -59,7 +56,6 @@ function LoginForm() {
                     className="login-input"
                 />
             </div>
-            {/* Quitamos los <br /> y usamos gap en el flexbox del contenedor o margin bottom */}
             <div className="login-input-group">
                 <input
                     type="password"
@@ -67,12 +63,10 @@ function LoginForm() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="login-input" 
+                    className="login-input"
                 />
             </div>
-
-            <button type="submit" className="login-button">Ingresar</button> {/* Clase para el botón */}
-
+            <button type="submit" className="login-button">Ingresar</button>
             {message && (
                 <p className={`login-message ${isError ? 'error' : 'success'}`}>
                     {message}

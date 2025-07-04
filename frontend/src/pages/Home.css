@@ -3,41 +3,45 @@
 .home-page-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: var(--spacing-xl) var(--spacing-md); /* Padding superior/inferior mayor */
-    background-color: var(--background-light);
-    min-height: 100vh;
-    box-sizing: border-box;
-    width: 100%; /* Asegura que ocupe todo el ancho */
+    align-items: center; /* Centra horizontalmente el contenido */
+    padding: var(--spacing-lg); /* Espaciado general alrededor de la página */
+    min-height: calc(100vh - var(--navbar-height, 60px)); /* Ajusta la altura para ocupar el espacio restante */
+    background-color: var(--background-light); /* Fondo de la página, del tema global */
+    color: var(--text-dark); /* Color de texto del tema global */
 }
 
-.home-title {
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-xl); /* Mayor espacio debajo del título */
-    font-size: 3em; /* Título un poco más grande para ser impactante pero serio */
+/* Contenedor principal de la tarjeta de tareas */
+.home-content-card {
+    background-color: var(--background-lighter); /* Fondo más claro para la tarjeta */
+    padding: var(--spacing-xl); /* Espaciado dentro de la tarjeta */
+    border-radius: var(--border-radius-base); /* Bordes redondeados */
+    box-shadow: var(--shadow-base); /* Sombra para dar profundidad */
+    width: 100%;
+    max-width: 800px; /* Ancho máximo para la tarjeta, la hace responsive */
+    margin-top: var(--spacing-md); /* Margen superior para separarlo del título/navbar */
+    border: 1px solid var(--border-color); /* Borde sutil */
+    text-align: center; /* Centrar el texto por defecto */
+}
+
+.home-content-card h1 {
+    color: var(--primary-color); /* Color del título principal */
+    margin-bottom: var(--spacing-lg); /* Espacio debajo del título */
+    font-size: 2.2em;
     font-weight: 700;
-    text-align: center;
-    letter-spacing: -0.8px;
 }
 
-.task-section-wrapper { /* Contenedor para TaskForm y TaskList */
-    width: 90%;
-    max-width: 900px; /* Limita el ancho de la sección de tareas */
-    background-color: var(--background-lighter);
-    border-radius: var(--border-radius-base);
-    box-shadow: var(--shadow-light);
-    padding: var(--spacing-lg) var(--spacing-xl);
-    border: 1px solid var(--border-color);
-    box-sizing: border-box; /* Incluye padding en el ancho */
-}
-
+/* Media Queries para responsividad si es necesario */
 @media (max-width: 768px) {
-    .home-title {
-        font-size: 2.2em;
-        margin-bottom: var(--spacing-lg);
-    }
-    .task-section-wrapper {
-        width: 95%;
+    .home-page-container {
         padding: var(--spacing-md);
+    }
+    .home-content-card {
+        padding: var(--spacing-lg);
+        max-width: 100%;
+        border-radius: 0; /* Sin bordes redondeados en móviles si se prefiere full-width */
+    }
+    .home-content-card h1 {
+        font-size: 1.8em;
+        margin-bottom: var(--spacing-md);
     }
 }

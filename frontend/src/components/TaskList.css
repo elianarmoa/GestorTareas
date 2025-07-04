@@ -1,110 +1,118 @@
 /* frontend/src/components/TaskList.css */
 
 .task-list-container {
-    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--background-lighter); /* Fondo de la tarjeta, si está dentro de una */
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-base);
+    width: 100%; /* Ocupa el ancho disponible de su contenedor */
+    box-sizing: border-box; /* Asegura que padding no aumente el ancho total */
 }
 
-.task-list {
-    list-style: none;
+.task-list-container h2 { /* Si en el futuro añades un h2 dentro de este contenedor */
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-lg);
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.task-message {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.task-list-ul {
+    list-style: none; /* Elimina los puntos predeterminados de la lista */
     padding: 0;
     margin: 0;
 }
 
-.task-item {
+.task-list-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--spacing-md);
+    justify-content: space-between; /* Alinea título a un lado y botones al otro */
+    align-items: center; /* Centra verticalmente los elementos */
+    background-color: var(--background-light); /* Fondo para cada ítem de tarea */
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-base);
+    padding: var(--spacing-sm) var(--spacing-md);
     margin-bottom: var(--spacing-sm); /* Espacio entre tareas */
-    background-color: var(--background-lighter);
-    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.task-item:last-child {
-    margin-bottom: 0; /* No hay margen en la última tarea */
+.task-list-item:last-child {
+    margin-bottom: 0; /* No hay margen después del último ítem */
 }
 
-.task-item.completed {
-    background-color: #e6ffe6; /* Un verde muy suave para tareas completadas */
-    opacity: 0.8;
-    border-color: #c8e6c9;
+.task-list-item:hover {
+    box-shadow: var(--shadow-base); /* Sombra al pasar el mouse */
 }
-
-/* Estilo para el modo oscuro en tareas completadas */
-body.dark-mode .task-item.completed {
-    background-color: #3f5544; /* Verde oscuro para completadas en modo oscuro */
-    border-color: #526f55;
-    color: var(--text-dark); /* Color de texto del tema oscuro */
-}
-
 
 .task-title {
-    flex-grow: 1; /* Para que el título ocupe el espacio restante */
+    flex-grow: 1; /* Permite que el título ocupe el espacio disponible */
     font-size: 1.1em;
     color: var(--text-dark);
-    margin-right: var(--spacing-md); /* Espacio entre el título y los botones */
+    word-break: break-word; /* Rompe palabras largas para evitar desbordamiento */
+    margin-right: var(--spacing-sm); /* Espacio entre el título y los botones */
 }
 
-.task-item.completed .task-title {
-    text-decoration: line-through;
-    color: var(--secondary-color);
+.task-title.completed {
+    text-decoration: line-through; /* Tacha el texto si la tarea está completada */
+    color: var(--text-secondary); /* Color más tenue para tareas completadas */
+    opacity: 0.8;
 }
 
 .task-actions {
     display: flex;
-    gap: var(--spacing-sm); /* Espacio entre los botones de acción */
+    gap: var(--spacing-xs); /* Espacio entre los botones de acción */
+    flex-shrink: 0; /* Evita que los botones se encojan */
 }
 
-.task-action-button {
-    padding: var(--spacing-xs) var(--spacing-sm);
+.task-button {
+    /* Herada estilos base de button en App.css */
+    padding: var(--spacing-xs) var(--spacing-sm); /* Padding más pequeño para botones de acción */
     font-size: 0.9em;
     font-weight: 500;
-    white-space: nowrap; /* Evita que el texto del botón se rompa */
 }
 
 .complete-button {
-    background-color: var(--success-color); /* Verde */
+    background-color: var(--success-color); /* Color verde para completar */
     color: var(--text-light);
 }
 
 .complete-button:hover {
-    background-color: #218838;
+    background-color: #218838; /* Tono más oscuro de verde al hover */
 }
 
 .delete-button {
-    background-color: var(--error-color); /* Rojo */
+    background-color: var(--error-color); /* Color rojo para eliminar */
     color: var(--text-light);
 }
 
 .delete-button:hover {
-    background-color: #c82333;
+    background-color: #c82333; /* Tono más oscuro de rojo al hover */
 }
 
-.edit-button { /* Si tienes un botón de editar */
-    background-color: var(--info-color); /* Azul claro */
-    color: var(--text-light);
-}
-
-.edit-button:hover {
-    background-color: #138496;
-}
-
-
-/* Responsive */
+/* Media Queries para responsividad */
 @media (max-width: 600px) {
-    .task-item {
-        flex-direction: column; /* Apila el título y los botones en pantallas pequeñas */
-        align-items: flex-start; /* Alinea el contenido a la izquierda */
-        gap: var(--spacing-sm);
+    .task-list-item {
+        flex-direction: column; /* Apila elementos en pantallas pequeñas */
+        align-items: flex-start;
+        padding: var(--spacing-sm);
     }
     .task-title {
+        margin-bottom: var(--spacing-sm); /* Espacio debajo del título cuando apilado */
         margin-right: 0;
-        margin-bottom: var(--spacing-sm);
     }
     .task-actions {
-        width: 100%;
-        justify-content: flex-end; /* Alinea los botones a la derecha en la línea de abajo */
+        width: 100%; /* Botones ocupan todo el ancho */
+        justify-content: flex-end; /* Alinea los botones a la derecha */
+        gap: var(--spacing-sm); /* Más espacio entre botones cuando apilados */
+    }
+    .task-button {
+        width: auto; /* Permite que los botones tengan su ancho natural */
+        flex-grow: 1; /* Hace que los botones se estiren para llenar el espacio disponible */
     }
 }

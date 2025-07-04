@@ -7,21 +7,21 @@ function RegisterForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState(null);
-    const [isError, setIsError] = useState(false); // Para distinguir si el mensaje es error o éxito
+    const [isError, setIsError] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage(null); // Limpiar mensaje anterior
-        setIsError(false); // Resetear estado de error
+        setMessage(null);
+        setIsError(false);
 
         try {
             const res = await axios.post('http://localhost:3000/api/users/register', {
                 username,
                 password
             });
-            setMessage(res.data.message || 'Usuario registrado exitosamente'); // "Usuario registrado correctamente"
+            setMessage(res.data.message || 'Usuario registrado exitosamente');
             setIsError(false);
-            setUsername(''); // Limpiar campos después de un registro exitoso
+            setUsername('');
             setPassword('');
         } catch (err) {
             const errorMessage = err.response?.data?.error || 'Error al registrar usuario.';

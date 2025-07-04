@@ -1,17 +1,17 @@
+// frontend/src/components/Navbar.jsx
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Para navegación
-import { AuthContext } from '../context/AuthContext'; // Tu contexto de autenticación
-import './Navbar.css'; 
-import DarkModeToggle from './DarkModeToggle'; // Lo crearemos en el siguiente paso
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import './Navbar.css'; // Asegúrate de que esta línea esté presente
+import DarkModeToggle from './DarkModeToggle';
 
 function Navbar() {
     const { auth, setAuth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        setAuth({ user: null, token: null, role: null }); // Limpiar el estado de autenticación
-        // Opcional: Eliminar cualquier cookie/localStorage aquí si no lo haces en el useEffect del AuthProvider
-        navigate('/login'); // Redirigir al login después de cerrar sesión
+        setAuth({ user: null, token: null, role: null });
+        navigate('/login');
     };
 
     return (
@@ -20,10 +20,9 @@ function Navbar() {
                 <Link to="/">Gestor de Tareas</Link>
             </div>
             <ul className="navbar-links">
-                {auth.token ? ( // Si el usuario está logueado
+                {auth && auth.token ? (
                     <>
                         <li><Link to="/home">Mis Tareas</Link></li>
-                        {/* Puedes añadir enlaces para administradores aquí si implementas roles */}
                         {/* {auth.role === 'admin' && (
                             <li><Link to="/admin">Panel Admin</Link></li>
                         )} */}
@@ -33,14 +32,14 @@ function Navbar() {
                             </button>
                         </li>
                     </>
-                ) : ( // Si el usuario no está logueado
+                ) : (
                     <>
                         <li><Link to="/login">Iniciar Sesión</Link></li>
                         <li><Link to="/register">Registrarse</Link></li>
                     </>
                 )}
                 <li>
-                    <DarkModeToggle /> {/* El toggle de modo oscuro */}
+                    <DarkModeToggle />
                 </li>
             </ul>
         </nav>

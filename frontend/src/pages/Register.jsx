@@ -3,11 +3,11 @@ import RegisterForm from '../components/RegisterForm';
 import './Register.css'; // <--- ¡Importa este nuevo CSS!
 
 function Register() {
-return (
+  return (
     <div className="register-page-container"> {/* <--- Aplica la clase del contenedor de página */}
-    <RegisterForm />
+      <RegisterForm />
     </div>
-);
+  );
 }
 
 export default Register;

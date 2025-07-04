@@ -1,83 +1,73 @@
 /* frontend/src/components/LoginForm.css */
 
 .login-form-container {
-    background-color: var(--background-lighter);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius-base);
-    box-shadow: var(--shadow-light);
+    background-color: var(--background-lighter); /* Fondo de la tarjeta */
+    padding: var(--spacing-xl); /* Espaciado interno generoso */
+    border-radius: var(--border-radius-base); /* Bordes redondeados */
+    box-shadow: var(--shadow-base); /* Sombra para dar profundidad */
     width: 100%;
-    max-width: 400px;
-    border: 1px solid var(--border-color);
-    box-sizing: border-box;
+    max-width: 400px; /* Ancho máximo para el formulario */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md); /* Espacio entre elementos del formulario */
+    border: 1px solid var(--border-color); /* Borde sutil */
+    box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
 }
 
-.login-form-container h2 {
+.login-form-title {
     text-align: center;
-    color: var(--text-dark);
-    margin-bottom: var(--spacing-lg);
-    font-size: 2em;
+    color: var(--primary-color); /* Color del título, consistente con el tema */
+    margin-bottom: var(--spacing-sm); /* Espacio debajo del título */
+    font-size: 1.8em;
     font-weight: 700;
 }
 
-.form-group {
-    margin-bottom: var(--spacing-md);
+.login-input-group {
+    margin-bottom: var(--spacing-xs); /* Pequeño espacio entre grupos de input */
+    width: 100%; /* Asegura que el grupo de input ocupe todo el ancho */
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-dark);
-    font-weight: 500;
-    font-size: 0.95em;
-}
-
-.form-group input {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-base);
-    font-size: 1em;
-    color: var(--text-dark);
-    background-color: var(--background-lighter);
-    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    box-sizing: border-box;
-}
-
-.form-group input::placeholder {
-    color: var(--secondary-color);
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(93, 93, 129, 0.2);
+.login-input {
+    /* Hereda estilos base de input en App.css */
+    box-sizing: border-box; /* Asegura que padding no aumente el ancho total */
+    width: 100%; /* Asegura que el input ocupe todo el ancho disponible
 }
 
 .login-button {
-    width: 100%;
-    background-color: var(--primary-color);
+    /* Hereda estilos base de button en App.css */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    background-color: var(--accent-color); /* Color de acento para el botón principal */
     color: var(--text-light);
-    margin-top: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
+    margin-top: var(--spacing-sm); /* Espacio superior para separarlo del último input */
 }
 
 .login-button:hover {
-    background-color: var(--primary-hover-color);
+    background-color: var(--accent-hover-color);
 }
 
-.login-form-container p {
+.login-message {
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-base);
     text-align: center;
+    font-weight: 500;
+    font-size: 0.95em;
     margin-top: var(--spacing-md);
-    color: var(--text-dark);
-    font-size: 0.9em;
 }
 
-.login-form-container p a {
-    font-weight: 600;
+.login-message.success {
+    background-color: var(--success-color);
+    color: var(--text-light);
 }
 
-@media (max-width: 600px) {
+.login-message.error {
+    background-color: var(--error-color);
+    color: var(--text-light);
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 480px) {
     .login-form-container {
         padding: var(--spacing-md);
+        margin: var(--spacing-md); /* Margen para que no se pegue a los bordes de la pantalla pequeña */
     }
 }

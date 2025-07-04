@@ -1,19 +1,30 @@
-/* frontend/src/App.css */
-
-/* Variables CSS para consistencia y tema claro (predeterminado) */
 :root {
-    --primary-color: #5d5d81; /* Un violeta/azul oscuro sofisticado */
-    --primary-hover-color: #4b4b6b; /* Un tono más oscuro para hover */
-    --secondary-color: #a0a0b9; /* Un gris azulado claro para texto secundario o bordes */
-    --background-light: #f4f7f6; /* Fondo general de la app (muy claro) */
-    --background-lighter: #ffffff; /* Fondo para tarjetas/componentes (blanco) */
-    --text-dark: #343a40; /* Color principal del texto (oscuro) */
-    --text-light: #ffffff; /* Color de texto en fondos oscuros */
-    --border-color: #e0e0e0; /* Color de borde suave */
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
-    --success-color: #4CAF50; /* Verde para éxito */
-    --error-color: #f44336; /* Rojo para error */
-    --info-color: #2196F3; /* Azul para información */
+    /* Colores primarios y de acento */
+    --primary-color: #34495e; /* Azul oscuro/grisáceo, muy profesional */
+    --primary-hover-color: #2c3e50; /* Tono más oscuro para hover */
+    --accent-color: #3498db; /* Un azul más vibrante para enlaces/botones importantes */
+    --accent-hover-color: #2980b9; /* Hover para el acento */
+
+    /* Colores de fondo */
+    --background-light: #f8f9fa; /* Fondo general claro, suave */
+    --background-lighter: #ffffff; /* Fondo para tarjetas/componentes, blanco puro */
+    --background-dark-mode: #2c3e50; /* Fondo general oscuro */
+    --background-darker-mode: #34495e; /* Fondo para tarjetas/componentes en modo oscuro */
+
+    /* Colores de texto */
+    --text-dark: #343a40; /* Texto principal oscuro */
+    --text-light: #ffffff; /* Texto claro (para fondos oscuros) */
+    --text-secondary: #6c757d; /* Texto secundario/desactivado */
+
+    /* Bordes y sombras */
+    --border-color: #e9ecef; /* Borde muy sutil y claro */
+    --shadow-base: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave y sutil */
+    --shadow-dark: 0 6px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada para modo oscuro */
+
+    /* Colores de estado (éxito, error, info) */
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --info-color: #17a2b8;
 
     /* Espaciados y radios */
     --border-radius-base: 8px;
@@ -26,18 +37,19 @@
 
 /* Tema Oscuro: Sobrescribe las variables cuando la clase 'dark-mode' está presente en el body */
 body.dark-mode {
-    --primary-color: #6C757D; /* Un gris oscuro para el modo oscuro */
-    --primary-hover-color: #5a6167;
-    --secondary-color: #ced4da;
-    --background-light: #343a44; /* Fondo general de la app (oscuro) */
-    --background-lighter: #2c3038; /* Fondo para tarjetas/componentes (oscuro) */
-    --text-dark: #f8f9fa; /* Color principal del texto (claro) */
-    --text-light: #ffffff; /* Se mantiene */
-    --border-color: #495057; /* Borde oscuro */
-    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada en oscuro */
-    --success-color: #66bb6a; /* Verde más claro para contraste */
-    --error-color: #ef5350; /* Rojo más claro para contraste */
-    --info-color: #42a5f5; /* Azul más claro para contraste */
+    --primary-color: #6c757d; /* Gris oscuro para el modo oscuro */
+    --primary-hover-color: #5a6268;
+    --accent-color: #60a5fa; /* Azul claro para acento en oscuro */
+    --accent-hover-color: #3b82f6;
+
+    --background-light: var(--background-dark-mode);
+    --background-lighter: var(--background-darker-mode);
+    --text-dark: #f8f9fa; /* Texto principal claro */
+    --text-light: #ffffff;
+    --text-secondary: #adb5bd;
+
+    --border-color: #495057;
+    --shadow-base: var(--shadow-dark);
 }
 
 /* Reset básico y estilos globales */
@@ -46,10 +58,11 @@ html, body, #root {
     padding: 0;
     height: 100%;
     box-sizing: border-box;
-    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Transición suave para el cambio de tema */
+    /* Transición suave para el cambio de tema */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 body {
@@ -60,17 +73,17 @@ body {
 
 /* Estilos de enlaces globales */
 a {
-    color: var(--primary-color);
+    color: var(--accent-color); /* Usamos el color de acento para enlaces */
     text-decoration: none;
     transition: color 0.2s ease-in-out;
 }
 
 a:hover {
-    color: var(--primary-hover-color);
+    color: var(--accent-hover-color);
     text-decoration: underline;
 }
 
-/* Estilos de botones base - ¡ACTUALIZADOS! */
+/* Estilos de botones base */
 button {
     cursor: pointer;
     /* REINICIA LAS PROPIEDADES PREDETERMINADAS DEL NAVEGADOR */
@@ -80,8 +93,8 @@ button {
     
     border: none; /* Asegura que no haya borde predeterminado */
     outline: none; /* Elimina el contorno al hacer focus */
-    background-color: var(--primary-color); /* Establece el color de fondo base */
-    color: var(--text-light); /* Establece el color del texto base */
+    background-color: var(--primary-color); /* Color de fondo base para botones */
+    color: var(--text-light); /* Color de texto base para botones */
 
     border-radius: var(--border-radius-base);
     padding: var(--spacing-sm) var(--spacing-md);
@@ -95,7 +108,7 @@ button {
 }
 
 button:hover {
-    background-color: var(--primary-hover-color); /* Asegura el hover del color primario */
+    background-color: var(--primary-hover-color);
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
@@ -110,17 +123,55 @@ button:disabled {
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-    background-color: var(--secondary-color); /* Un color para botones deshabilitados */
-    color: var(--text-dark);
+    background-color: var(--text-secondary); /* Un color para botones deshabilitados */
+    color: var(--text-light);
 }
 
-/* Mensajes de feedback (éstos asumen que tienes componentes que usan estas clases) */
+/* Estilos para inputs de formulario base */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+textarea {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: 1em;
+    color: var(--text-dark);
+    background-color: var(--background-lighter);
+    box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder,
+input[type="number"]::placeholder,
+textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Sombra de enfoque con color de acento */
+}
+
+
+/* Mensajes de feedback genéricos */
 .message-container {
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-base);
     margin-bottom: var(--spacing-md);
     text-align: center;
     font-weight: 500;
+    font-size: 0.95em;
 }
 
 .message-success {

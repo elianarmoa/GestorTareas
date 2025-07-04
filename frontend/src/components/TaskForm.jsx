@@ -37,7 +37,7 @@ function TaskForm({ onTaskCreated }) {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
-                className="task-form-input" // <--- Aquí se eliminó el comentario incorrecto
+                className="task-form-input" // <--- Clase correcta aplicada
             />
             <button type="submit" className="task-form-button">
                 Agregar

@@ -1,16 +1,21 @@
 /* frontend/src/pages/Login.css */
 
-.login-page-container {
+.login-page-wrapper {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 60px); /* Ajusta por la altura de la Navbar */
-    background-color: var(--background-light);
-    padding: var(--spacing-lg);
-    box-sizing: border-box;
+    justify-content: center; /* Centra horizontalmente el contenido */
+    align-items: center; /* Centra verticalmente el contenido */
+    min-height: calc(100vh - var(--navbar-height, 60px)); /* Ocupa el espacio restante de la pantalla, ajustando por la navbar */
+    padding: var(--spacing-lg); /* Espaciado general alrededor */
+    background-color: var(--background-light); /* Fondo de la página, del tema global */
 }
 
-/* Para manejar el espacio cuando no hay navbar visible (ej: antes de login) */
-.login-page-full-height {
-    min-height: 100vh;
+/* El estilo de la tarjeta del formulario de login se definirá en LoginForm.css */
+/* Aquí solo nos aseguramos de que la página contenga el formulario de manera centrada */
+
+@media (max-width: 768px) {
+    .login-page-wrapper {
+        padding: var(--spacing-md);
+        /* En pantallas pequeñas, podría ser útil alinear arriba en lugar de centrar verticalmente */
+        /* align-items: flex-start; */ 
+    }
 }

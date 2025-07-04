@@ -1,6 +1,7 @@
+// frontend/src/components/DarkModeToggle.jsx
 import React from 'react';
 import useDarkMode from '../Hooks/useDarkMode'; // Importa tu hook
-import './DarkModeToggle.css';
+import './DarkModeToggle.css'; // Asegúrate de que esta línea esté presente
 
 function DarkModeToggle() {
     const [isDarkMode, toggleDarkMode] = useDarkMode();
