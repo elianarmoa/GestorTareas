@@ -1,0 +1,110 @@
+/* frontend/src/components/TaskList.css */
+
+.task-list-container {
+    width: 100%;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    margin-bottom: var(--spacing-sm); /* Espacio entre tareas */
+    background-color: var(--background-lighter);
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.task-item:last-child {
+    margin-bottom: 0; /* No hay margen en la última tarea */
+}
+
+.task-item.completed {
+    background-color: #e6ffe6; /* Un verde muy suave para tareas completadas */
+    opacity: 0.8;
+    border-color: #c8e6c9;
+}
+
+/* Estilo para el modo oscuro en tareas completadas */
+body.dark-mode .task-item.completed {
+    background-color: #3f5544; /* Verde oscuro para completadas en modo oscuro */
+    border-color: #526f55;
+    color: var(--text-dark); /* Color de texto del tema oscuro */
+}
+
+
+.task-title {
+    flex-grow: 1; /* Para que el título ocupe el espacio restante */
+    font-size: 1.1em;
+    color: var(--text-dark);
+    margin-right: var(--spacing-md); /* Espacio entre el título y los botones */
+}
+
+.task-item.completed .task-title {
+    text-decoration: line-through;
+    color: var(--secondary-color);
+}
+
+.task-actions {
+    display: flex;
+    gap: var(--spacing-sm); /* Espacio entre los botones de acción */
+}
+
+.task-action-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.9em;
+    font-weight: 500;
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+.complete-button {
+    background-color: var(--success-color); /* Verde */
+    color: var(--text-light);
+}
+
+.complete-button:hover {
+    background-color: #218838;
+}
+
+.delete-button {
+    background-color: var(--error-color); /* Rojo */
+    color: var(--text-light);
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+.edit-button { /* Si tienes un botón de editar */
+    background-color: var(--info-color); /* Azul claro */
+    color: var(--text-light);
+}
+
+.edit-button:hover {
+    background-color: #138496;
+}
+
+
+/* Responsive */
+@media (max-width: 600px) {
+    .task-item {
+        flex-direction: column; /* Apila el título y los botones en pantallas pequeñas */
+        align-items: flex-start; /* Alinea el contenido a la izquierda */
+        gap: var(--spacing-sm);
+    }
+    .task-title {
+        margin-right: 0;
+        margin-bottom: var(--spacing-sm);
+    }
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end; /* Alinea los botones a la derecha en la línea de abajo */
+    }
+}

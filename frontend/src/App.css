@@ -1,0 +1,139 @@
+/* frontend/src/App.css */
+
+/* Variables CSS para consistencia y tema claro (predeterminado) */
+:root {
+    --primary-color: #5d5d81; /* Un violeta/azul oscuro sofisticado */
+    --primary-hover-color: #4b4b6b; /* Un tono más oscuro para hover */
+    --secondary-color: #a0a0b9; /* Un gris azulado claro para texto secundario o bordes */
+    --background-light: #f4f7f6; /* Fondo general de la app (muy claro) */
+    --background-lighter: #ffffff; /* Fondo para tarjetas/componentes (blanco) */
+    --text-dark: #343a40; /* Color principal del texto (oscuro) */
+    --text-light: #ffffff; /* Color de texto en fondos oscuros */
+    --border-color: #e0e0e0; /* Color de borde suave */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08); /* Sombra suave */
+    --success-color: #4CAF50; /* Verde para éxito */
+    --error-color: #f44336; /* Rojo para error */
+    --info-color: #2196F3; /* Azul para información */
+
+    /* Espaciados y radios */
+    --border-radius-base: 8px;
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+}
+
+/* Tema Oscuro: Sobrescribe las variables cuando la clase 'dark-mode' está presente en el body */
+body.dark-mode {
+    --primary-color: #6C757D; /* Un gris oscuro para el modo oscuro */
+    --primary-hover-color: #5a6167;
+    --secondary-color: #ced4da;
+    --background-light: #343a44; /* Fondo general de la app (oscuro) */
+    --background-lighter: #2c3038; /* Fondo para tarjetas/componentes (oscuro) */
+    --text-dark: #f8f9fa; /* Color principal del texto (claro) */
+    --text-light: #ffffff; /* Se mantiene */
+    --border-color: #495057; /* Borde oscuro */
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada en oscuro */
+    --success-color: #66bb6a; /* Verde más claro para contraste */
+    --error-color: #ef5350; /* Rojo más claro para contraste */
+    --info-color: #42a5f5; /* Azul más claro para contraste */
+}
+
+/* Reset básico y estilos globales */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Transición suave para el cambio de tema */
+}
+
+body {
+    background-color: var(--background-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Estilos de enlaces globales */
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--primary-hover-color);
+    text-decoration: underline;
+}
+
+/* Estilos de botones base - ¡ACTUALIZADOS! */
+button {
+    cursor: pointer;
+    /* REINICIA LAS PROPIEDADES PREDETERMINADAS DEL NAVEGADOR */
+    appearance: none; /* Crucial para resetear estilos nativos */
+    -webkit-appearance: none; /* Para navegadores basados en Webkit */
+    -moz-appearance: none; /* Para Firefox */
+    
+    border: none; /* Asegura que no haya borde predeterminado */
+    outline: none; /* Elimina el contorno al hacer focus */
+    background-color: var(--primary-color); /* Establece el color de fondo base */
+    color: var(--text-light); /* Establece el color del texto base */
+
+    border-radius: var(--border-radius-base);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+}
+
+button:hover {
+    background-color: var(--primary-hover-color); /* Asegura el hover del color primario */
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    background-color: var(--secondary-color); /* Un color para botones deshabilitados */
+    color: var(--text-dark);
+}
+
+/* Mensajes de feedback (éstos asumen que tienes componentes que usan estas clases) */
+.message-container {
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-base);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    font-weight: 500;
+}
+
+.message-success {
+    background-color: var(--success-color);
+    color: var(--text-light);
+}
+
+.message-error {
+    background-color: var(--error-color);
+    color: var(--text-light);
+}
+
+.message-info {
+    background-color: var(--info-color);
+    color: var(--text-light);
+}

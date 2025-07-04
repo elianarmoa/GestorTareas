@@ -1,0 +1,52 @@
+/* frontend/src/components/TaskForm.css */
+
+.task-form {
+    display: flex;
+    gap: var(--spacing-sm); /* Espacio entre el input y el botón */
+    margin-bottom: var(--spacing-lg); /* Espacio debajo del formulario */
+    width: 100%;
+}
+
+.task-input {
+    flex-grow: 1; /* Para que el input ocupe el espacio restante */
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: 1em;
+    color: var(--text-dark);
+    background-color: var(--background-lighter); /* Asegura que se adapte al tema */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-sizing: border-box;
+}
+
+.task-input::placeholder {
+    color: var(--secondary-color);
+}
+
+.task-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(93, 93, 129, 0.2); /* Sombra con el color primario */
+}
+
+.add-task-button {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    min-width: 100px; /* Ancho mínimo para el botón */
+}
+
+.add-task-button:hover {
+    background-color: var(--primary-hover-color);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .task-form {
+        flex-direction: column; /* Apila el input y el botón en pantallas pequeñas */
+    }
+    .add-task-button {
+        width: 100%; /* El botón ocupa todo el ancho */
+        margin-top: var(--spacing-sm);
+    }
+}

@@ -1,0 +1,43 @@
+{
+"openapi": "3.0.0",
+"info": {
+    "title": "Task Manager API",
+    "version": "1.0.0",
+    "description": "Documentación pública de la API para tareas (solo endpoints GET)"
+},
+"servers": [
+    {
+    "url": "http://localhost:3000"
+    }
+],
+"paths": {
+    "/api/tasks": {
+    "get": {
+        "summary": "Obtener todas las tareas",
+        "description": "Devuelve un array con todas las tareas registradas.",
+        "responses": {
+        "200": {
+            "description": "Lista de tareas",
+            "content": {
+            "application/json": {
+                "schema": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                    "_id": { "type": "string" },
+                    "title": { "type": "string" },
+                    "completed": { "type": "boolean" },
+                    "createdAt": { "type": "string", "format": "date-time" },
+                    "updatedAt": { "type": "string", "format": "date-time" }
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+    }
+    }
+}
+}

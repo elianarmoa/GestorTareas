@@ -1,0 +1,43 @@
+/* frontend/src/pages/Home.css */
+
+.home-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--spacing-xl) var(--spacing-md); /* Padding superior/inferior mayor */
+    background-color: var(--background-light);
+    min-height: 100vh;
+    box-sizing: border-box;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.home-title {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-xl); /* Mayor espacio debajo del título */
+    font-size: 3em; /* Título un poco más grande para ser impactante pero serio */
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -0.8px;
+}
+
+.task-section-wrapper { /* Contenedor para TaskForm y TaskList */
+    width: 90%;
+    max-width: 900px; /* Limita el ancho de la sección de tareas */
+    background-color: var(--background-lighter);
+    border-radius: var(--border-radius-base);
+    box-shadow: var(--shadow-light);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border: 1px solid var(--border-color);
+    box-sizing: border-box; /* Incluye padding en el ancho */
+}
+
+@media (max-width: 768px) {
+    .home-title {
+        font-size: 2.2em;
+        margin-bottom: var(--spacing-lg);
+    }
+    .task-section-wrapper {
+        width: 95%;
+        padding: var(--spacing-md);
+    }
+}

@@ -1,0 +1,90 @@
+/* frontend/src/components/Navbar.css */
+
+.navbar {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: var(--spacing-sm) var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    width: 100%;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+}
+
+.navbar-brand a {
+    color: var(--text-light);
+    font-size: 1.6em;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.navbar-brand a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.navbar-links li a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 1.1em;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-base);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.navbar-links li a:hover {
+    background-color: var(--primary-hover-color);
+    text-decoration: none;
+}
+
+.navbar-button {
+    background-color: transparent;
+    border: 1px solid var(--text-light);
+    color: var(--text-light);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.navbar-button:hover {
+    background-color: var(--text-light);
+    color: var(--primary-color);
+    transform: translateY(0); /* Anula el efecto global de botón si lo hay */
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--spacing-sm);
+    }
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        margin-top: var(--spacing-sm);
+        gap: var(--spacing-xs);
+    }
+    .navbar-links li {
+        width: 100%;
+    }
+    .navbar-links li a,
+    .navbar-button {
+        width: 100%;
+        text-align: center;
+        padding: var(--spacing-sm);
+    }
+}
