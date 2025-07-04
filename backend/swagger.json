@@ -1,43 +1,174 @@
 {
-"openapi": "3.0.0",
-"info": {
+  "openapi": "3.0.0",
+  "info": {
     "title": "Task Manager API",
     "version": "1.0.0",
-    "description": "Documentación pública de la API para tareas (solo endpoints GET)"
-},
-"servers": [
+    "description": "Documentación pública de la API para tareas. **Nota: Los endpoints protegidos requieren un token JWT obtenido del login.**"
+  },
+  "servers": [
     {
-    "url": "http://localhost:3000"
+      "url": "http://localhost:3000"
     }
-],
-"paths": {
+  ],
+  "paths": {
     "/api/tasks": {
-    "get": {
-        "summary": "Obtener todas las tareas",
-        "description": "Devuelve un array con todas las tareas registradas.",
+      "get": {
+        "summary": "Obtener todas las tareas del usuario autenticado",
+        "description": "Devuelve un array con todas las tareas registradas que pertenecen al usuario autenticado.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
-        "200": {
+          "200": {
             "description": "Lista de tareas",
             "content": {
-            "application/json": {
+              "application/json": {
                 "schema": {
-                "type": "array",
-                "items": {
+                  "type": "array",
+                  "items": {
                     "type": "object",
                     "properties": {
-                    "_id": { "type": "string" },
-                    "title": { "type": "string" },
-                    "completed": { "type": "boolean" },
-                    "createdAt": { "type": "string", "format": "date-time" },
-                    "updatedAt": { "type": "string", "format": "date-time" }
+                      "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b3" },
+                      "title": { "type": "string", "example": "Hacer la compra" },
+                      "completed": { "type": "boolean", "example": false },
+                      "userId": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b2" },
+                      "createdAt": { "type": "string", "format": "date-time" },
+                      "updatedAt": { "type": "string", "format": "date-time" }
                     }
+                  }
                 }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "Token no proporcionado" }
+                  }
                 }
+              }
             }
+          },
+          "500": {
+            "description": "Error interno del servidor."
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "summary": "Iniciar sesión de usuario",
+        "description": "Autentica un usuario y devuelve un token JWT.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string", "example": "testuser" },
+                  "password": { "type": "string", "example": "password123" }
+                }
+              }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso. Retorna el token JWT.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU4YTZkNmYyYzdiOGUxZjBlNGExYjIiLCJpYXQiOjE3MDk4NTU0NzcsImV4cCI6MTcwOTg1OTA3N30.EXAMPLE_TOKEN" },
+                    "message": { "type": "string", "example": "Inicio de sesión exitoso." }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Credenciales inválidas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "Usuario o contraseña incorrectos." }
+                  }
+                }
+              }
+            }
+          }
         }
+      }
+    },
+    "/api/users/register": {
+      "post": {
+        "summary": "Registrar un nuevo usuario",
+        "description": "Crea una nueva cuenta de usuario en el sistema.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string", "example": "newuser" },
+                  "password": { "type": "string", "example": "securepass" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Usuario registrado correctamente." }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error de validación o usuario existente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": { "type": "string", "example": "El usuario ya existe." }
+                  }
+                }
+              }
+            }
+          }
         }
+      }
     }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Ingrese el token JWT obtenido del endpoint /api/users/login. Formato: `Bearer <YOUR_TOKEN>`"
+      }
     }
-}
+  }
 }

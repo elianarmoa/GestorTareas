@@ -1,7 +1,9 @@
+// backend/routes/taskRoutes.js
+
 const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/taskController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const authMiddleware = require('../middlewares/authMiddleware'); // Asegúrate de que esta ruta es correcta (middlewares vs middleware)
 
 // Middleware de autenticación para proteger las rutas que lo necesiten
 // Se aplica 'authMiddleware' ANTES de la función del controlador en las rutas protegidas.
@@ -16,15 +18,18 @@ router.post('/', authMiddleware, taskController.createTask);
 router.patch('/:id', authMiddleware, taskController.toggleTask);
 
 // GET /api/tasks → Obtener todas las tareas del usuario autenticado
-router.get('/', authMiddleware, taskController.getAllTasks); // ahora protegida
+// Esta es la ruta para listar tareas del usuario logueado, y es PROTEGIDA.
+router.get('/', authMiddleware, taskController.getAllTasks);
 
 // DELETE /api/tasks/:id → Eliminar una tarea por su ID
 router.delete('/:id', authMiddleware, taskController.deleteTask);
 
-// --- Rutas Públicas (No requieren autenticación) ---
-// Estas rutas pueden ser accedidas por cualquier usuario sin necesidad de autenticación.
-
-// GET /api/tasks → Obtener todas las tareas
-router.get('/', taskController.getAllTasks);
+// --- CONSIDERACIÓN IMPORTANTE ---
+// Si necesitas una ruta GET de tareas que *no* requiera autenticación,
+// DEBERÍAS CREAR UN ENDPOINT DIFERENTE con un path distinto, por ejemplo:
+// router.get('/public-tasks', taskController.getPublicTasks);
+// En ese caso, 'getPublicTasks' en tu controlador *no* debería filtrar por req.user.id.
+// Si no te lo piden específicamente como "público" y con acceso sin token,
+// la mejor práctica es mantener todo lo relacionado a tareas del usuario, protegido.
 
 module.exports = router;

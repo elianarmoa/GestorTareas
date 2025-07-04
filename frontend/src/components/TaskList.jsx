@@ -9,6 +9,7 @@ function TaskList() {
     const { auth } = useContext(AuthContext);
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState(''); // Nuevo estado para el término de búsqueda
 
     useEffect(() => {
         if (!auth.token) return;
@@ -45,12 +46,11 @@ function TaskList() {
 
     const handleToggle = async (id) => {
         try {
-            // Encuentra la tarea para enviar su estado actual o simplemente el ID si la API lo permite
             const taskToToggle = tasks.find(task => task._id === id);
             if (!taskToToggle) return;
 
             const res = await axios.patch(`http://localhost:3000/api/tasks/${id}`,
-                { completed: !taskToToggle.completed }, // Envía el nuevo estado de 'completed'
+                { completed: !taskToToggle.completed },
                 {
                     headers: { Authorization: `Bearer ${auth.token}` }
                 }
@@ -66,6 +66,11 @@ function TaskList() {
         setTasks([...tasks, newTask]);
     };
 
+    // Lógica de filtrado de tareas
+    const filteredTasks = tasks.filter(task =>
+        task.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     if (!auth.token) {
         return <p className="task-message">Iniciá sesión para ver tus tareas</p>;
     }
@@ -74,21 +79,34 @@ function TaskList() {
     }
 
     return (
-        <div className="task-list-container"> {/* Contenedor principal de la lista */}
+        <div className="task-list-container">
             <TaskForm onTaskCreated={handleTaskCreated} />
 
-            {tasks.length === 0 ? (
+            {/* Nueva barra de búsqueda - Ubicada aquí */}
+            <div className="search-bar-container">
+                <input
+                    type="text"
+                    placeholder="Buscar tareas existentes..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
+                />
+            </div>
+
+            {filteredTasks.length === 0 && tasks.length > 0 && searchTerm !== '' ? (
+                <p className="task-message">No se encontraron tareas que coincidan con "{searchTerm}"</p>
+            ) : filteredTasks.length === 0 && tasks.length === 0 ? (
                 <p className="task-message">No tenés tareas</p>
             ) : (
-                <ul className="task-list-ul"> {/* Clase para la lista desordenada */}
-                    {tasks.map((task) => (
-                        <li key={task._id} className="task-list-item"> {/* Clase para cada elemento de la lista */}
+                <ul className="task-list-ul">
+                    {filteredTasks.map((task) => ( // Usar filteredTasks aquí
+                        <li key={task._id} className="task-list-item">
                             <span
                                 className={`task-title ${task.completed ? 'completed' : ''}`}
                             >
                                 {task.title}
                             </span>
-                            <div className="task-actions"> {/* Contenedor para los botones */}
+                            <div className="task-actions">
                                 <button
                                     onClick={() => handleToggle(task._id)}
                                     className="task-button complete-button"
