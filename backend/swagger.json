@@ -3,129 +3,40 @@
   "info": {
     "title": "Task Manager API",
     "version": "1.0.0",
-    "description": "Documentación pública de la API para tareas. **Nota: Los endpoints protegidos requieren un token JWT obtenido del login.**"
+    "description": "Documentación completa de la API del Gestor de Tareas. **Nota: Los endpoints protegidos requieren un token JWT válido obtenido del login y, en algunos casos, roles específicos (ej. 'admin').**"
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "description": "Servidor de desarrollo local"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuarios",
+      "description": "Operaciones relacionadas con la autenticación y gestión de usuarios."
+    },
+    {
+      "name": "Tareas",
+      "description": "Operaciones CRUD para las tareas de los usuarios."
+    },
+    {
+      "name": "Categorías",
+      "description": "Operaciones CRUD para las categorías de las tareas."
     }
   ],
   "paths": {
-    "/api/tasks": {
-      "get": {
-        "summary": "Obtener todas las tareas del usuario autenticado",
-        "description": "Devuelve un array con todas las tareas registradas que pertenecen al usuario autenticado.",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de tareas",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b3" },
-                      "title": { "type": "string", "example": "Hacer la compra" },
-                      "completed": { "type": "boolean", "example": false },
-                      "userId": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b2" },
-                      "createdAt": { "type": "string", "format": "date-time" },
-                      "updatedAt": { "type": "string", "format": "date-time" }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "No autorizado: Token no proporcionado o inválido.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string", "example": "Token no proporcionado" }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Error interno del servidor."
-          }
-        }
-      }
-    },
-    "/api/users/login": {
-      "post": {
-        "summary": "Iniciar sesión de usuario",
-        "description": "Autentica un usuario y devuelve un token JWT.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["username", "password"],
-                "properties": {
-                  "username": { "type": "string", "example": "testuser" },
-                  "password": { "type": "string", "example": "password123" }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Inicio de sesión exitoso. Retorna el token JWT.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU4YTZkNmYyYzdiOGUxZjBlNGExYjIiLCJpYXQiOjE3MDk4NTU0NzcsImV4cCI6MTcwOTg1OTA3N30.EXAMPLE_TOKEN" },
-                    "message": { "type": "string", "example": "Inicio de sesión exitoso." }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Credenciales inválidas.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "error": { "type": "string", "example": "Usuario o contraseña incorrectos." }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/users/register": {
       "post": {
+        "tags": ["Usuarios"],
         "summary": "Registrar un nuevo usuario",
-        "description": "Crea una nueva cuenta de usuario en el sistema.",
+        "description": "Crea una nueva cuenta de usuario en el sistema. **Rol:** Público",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": ["username", "password"],
-                "properties": {
-                  "username": { "type": "string", "example": "newuser" },
-                  "password": { "type": "string", "example": "securepass" }
-                }
+                "$ref": "#/components/schemas/UserRegister"
               }
             }
           }
@@ -149,11 +60,575 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": ["Usuarios"],
+        "summary": "Iniciar sesión de usuario",
+        "description": "Autentica un usuario y devuelve un token JWT. **Rol:** Público",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso. Retorna el token JWT.",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "error": { "type": "string", "example": "El usuario ya existe." }
+                    "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWU4YTZkNmYyYzdiOGUxZjBlNGExYjIiLCJpYXQiOjE3MDk4NTU0NzcsImV4cCI6MTcwOTg1OTA3N30.EXAMPLE_TOKEN" },
+                    "message": { "type": "string", "example": "Inicio de sesión exitoso." },
+                    "role": { "type": "string", "example": "user" }
                   }
                 }
+              }
+            }
+          },
+          "400": {
+            "description": "Credenciales inválidas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": ["Usuarios"],
+        "summary": "Obtener todos los usuarios",
+        "description": "Devuelve una lista de todos los usuarios registrados en el sistema. **Rol:** `admin`",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "403": {
+            "description": "Prohibido: No tienes permisos de administrador.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tareas"],
+        "summary": "Obtener todas las tareas del usuario autenticado",
+        "description": "Devuelve un array con todas las tareas que pertenecen al usuario autenticado, incluyendo la categoría populada. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tareas.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tareas"],
+        "summary": "Crear una nueva tarea",
+        "description": "Crea una nueva tarea asociada al usuario autenticado. Opcionalmente, puede asociarse a una categoría existente. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tarea creada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error de validación (ej. título obligatorio).",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/{id}": {
+      "patch": {
+        "tags": ["Tareas"],
+        "summary": "Alternar el estado de una tarea (completada/incompleta)",
+        "description": "Actualiza el estado `completed` de una tarea específica por su ID. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la tarea a actualizar.",
+            "schema": {
+              "type": "string",
+              "example": "65e8a6d6f2c7b8e1f0e4a1b3"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estado de tarea actualizado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Tarea no encontrada o no tienes permiso para actualizarla.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tareas"],
+        "summary": "Eliminar una tarea por ID",
+        "description": "Elimina una tarea específica por su ID. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la tarea a eliminar.",
+            "schema": {
+              "type": "string",
+              "example": "65e8a6d6f2c7b8e1f0e4a1b3"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tarea eliminada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Tarea eliminada exitosamente." }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Tarea no encontrada o no tienes permiso para eliminarla.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories": {
+      "post": {
+        "tags": ["Categorías"],
+        "summary": "Crear una nueva categoría",
+        "description": "Crea una nueva categoría para organizar las tareas. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoría creada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error de validación (ej. nombre obligatorio).",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicto: La categoría ya existe.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Categorías"],
+        "summary": "Obtener todas las categorías",
+        "description": "Devuelve una lista de todas las categorías disponibles. **Rol:** Autenticado",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de categorías.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Category"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/categories/{id}": {
+      "patch": {
+        "tags": ["Categorías"],
+        "summary": "Actualizar una categoría por ID",
+        "description": "Actualiza el nombre de una categoría específica. **Rol:** `admin`",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la categoría a actualizar.",
+            "schema": {
+              "type": "string",
+              "example": "65e8a6d6f2c7b8e1f0e4a1b4"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Categoría actualizada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Category"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error de validación (ej. nombre obligatorio).",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "403": {
+            "description": "Prohibido: No tienes permisos de administrador.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflicto: Ya existe otra categoría con ese nombre.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categorías"],
+        "summary": "Eliminar una categoría por ID",
+        "description": "Elimina una categoría específica por su ID. **Rol:** `admin`",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID de la categoría a eliminar.",
+            "schema": {
+              "type": "string",
+              "example": "65e8a6d6f2c7b8e1f0e4a1b4"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoría eliminada exitosamente.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string", "example": "Categoría eliminada exitosamente." }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado: Token no proporcionado o inválido.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "403": {
+            "description": "Prohibido: No tienes permisos de administrador.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "404": {
+            "description": "Categoría no encontrada.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno del servidor.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Error" }
               }
             }
           }
@@ -162,6 +637,86 @@
     }
   },
   "components": {
+    "schemas": {
+      "UserRegister": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": { "type": "string", "example": "newuser" },
+          "password": { "type": "string", "example": "securepass" }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": { "type": "string", "example": "testuser" },
+          "password": { "type": "string", "example": "password123" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b2" },
+          "username": { "type": "string", "example": "testuser" },
+          "role": { "type": "string", "example": "user", "enum": ["user", "admin"] },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b3" },
+          "title": { "type": "string", "example": "Hacer la compra" },
+          "description": { "type": "string", "example": "Leche, pan, huevos." },
+          "completed": { "type": "boolean", "example": false },
+          "userId": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b2" },
+          "category": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b4" },
+              "name": { "type": "string", "example": "Hogar" }
+            },
+            "description": "Categoría de la tarea (populada)"
+          },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "TaskCreate": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string", "example": "Planificar reunión" },
+          "description": { "type": "string", "example": "Preparar agenda y enviar invitaciones." },
+          "category": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b4", "description": "ID de la categoría a la que pertenece la tarea." }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b4" },
+          "name": { "type": "string", "example": "Trabajo" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CategoryCreate": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "example": "Personal" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string", "example": "Mensaje de error." },
+          "message": { "type": "string", "example": "Otro mensaje de error." }
+        }
+      }
+    },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",

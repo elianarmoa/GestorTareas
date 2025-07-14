@@ -20,8 +20,8 @@ Este es el frontend de la aplicación Full Stack de gestión de tareas. Desarrol
 ### 1. Clonar o descargar el proyecto
 
 ```bash
-git clone https://github.com/usuario/proyecto-final.git
-cd proyecto-final/frontend
+git clone https://github.com/elianarmoa/GestorTareas.git
+cd GestorTareas/frontend
 ```
 
 ### 2. Instalar dependencias

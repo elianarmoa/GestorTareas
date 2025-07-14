@@ -1,137 +1,340 @@
+## 📝 Notas Importantes para la Corrección
+
+Para facilitar la evaluación de las funcionalidades de administración, hemos incluido un script que crea automáticamente un usuario administrador.
+
+1.  **Asegurar que el servidor MongoDB esté corriendo** 
+2.  **Ejecuta el script de creación de administrador:**
+    Navega a la carpeta `backend` en tu terminal y ejecuta:
+    ```bash
+    npm run create-admin
+    ```
+    Este comando creará o actualizará un usuario con los siguientes credenciales:
+    * **Username:** `Administrador`
+    * **Password:** `123456`
+
+3.  **Probar las funcionalidades de administrador:**
+    * Una vez que el script haya terminado, inicia tu servidor backend (`npm run dev`).
+    * Utiliza Postman (o tu frontend) para enviar una petición `POST` a `http://localhost:3000/api/users/login` con el `Username` y `Password` proporcionados arriba.
+    * Utiliza el token JWT obtenido para acceder a las rutas protegidas para administradores, como `GET /api/users` o `PATCH/DELETE /api/categories/:id`.
+
 # 🧠 Task Manager API - Backend
 
-Este es el backend de una aplicación Full Stack para gestionar tareas. Fue desarrollado como parte del Proyecto Final del curso **Backend Developer - Módulo II**, utilizando tecnologías modernas como **Node.js**, **Express**, y **MongoDB**. Está preparado para integrarse con un frontend hecho en React y cumple con los requisitos académicos solicitados.
+Este es el backend de una aplicación Full Stack diseñada para la gestión eficiente de tareas. Desarrollado como el **Proyecto Final** del curso **Backend Developer - Módulo II** en la Facultad de Ingeniería de la UNMDP, este servicio RESTful utiliza un stack de tecnologías modernas como Node.js, Express y MongoDB. Está completamente preparado para integrarse con un frontend desarrollado en React y cumple con todos los requisitos académicos.
 
 ---
 
 ## 🚀 Tecnologías utilizadas
 
-- Node.js
-- Express.js
-- MongoDB + Mongoose
-- dotenv
-- cors
-- nodemon
+* **Node.js**: Entorno de ejecución para JavaScript.
+* **Express.js**: Framework web para Node.js, utilizado para construir la API.
+* **MongoDB**: Base de datos NoSQL, para almacenar la información de tareas, usuarios y categorías.
+* **Mongoose**: ODM (Object Data Modeling) para MongoDB en Node.js, facilitando la interacción con la base de datos.
+* **`dotenv`**: Para gestionar variables de entorno de forma segura.
+* **`cors`**: Middleware para habilitar Cross-Origin Resource Sharing.
+* **`jsonwebtoken`**: Para la generación y verificación de JSON Web Tokens (JWT) para la autenticación.
+* **`bcryptjs`**: Para el hashing seguro de contraseñas.
+* **`swagger-ui-express`**: Middleware para servir la documentación interactiva de la API (Swagger UI).
+* **`nodemon`**: Herramienta de desarrollo para el reinicio automático del servidor durante el desarrollo.
 
 ---
 
 ## 📦 Instalación y ejecución
 
-### 1. Clonar o descargar el proyecto
+### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/usuario/proyecto-final.git
-cd proyecto-final/backend
-```
+git clone [https://github.com/elianarmoa/GestorTareas.git](https://github.com/elianarmoa/GestorTareas.git)
+cd GestorTareas/backend
+2. Variables de entorno
+Crea un archivo .env en la raíz de la carpeta backend y añade las siguientes variables:
 
-O simplemente navegá a la carpeta del backend:
-
-```bash
-cd "C:\Users\Elian\Desktop\Facultad Programacion\Curso Full-Stack\ProyectoFinal\backend"
-```
-
----
-
-### 2. Instalar dependencias
-
-```bash
-npm install
-```
-
-Esto instalará:
-
-- `express`: servidor HTTP
-- `mongoose`: conexión a MongoDB
-- `cors`: habilita CORS
-- `dotenv`: manejo de variables de entorno
-- `nodemon` (dev): reinicio automático del servidor en desarrollo
-
----
-
-### 3. Configurar variables de entorno
-
-Crear un archivo `.env` en la raíz del backend con el siguiente contenido:
-
-```
-MONGO_URI=mongodb://localhost:27017/taskmanager
 PORT=3000
-```
+MONGO_URI=mongodb://localhost:27017/taskmanager
+JWT_SECRET=miclavesecreta123
+PORT: Puerto en el que se ejecutará el servidor backend.
 
-> Podés modificar el puerto si es necesario o usar una URI de MongoDB Atlas para producción.
+MONGO_URI: URI de conexión a tu base de datos MongoDB.
 
----
+JWT_SECRET: Clave secreta para firmar y verificar los JSON Web Tokens.
 
-### 4. Ejecutar el servidor
+3. Instalar dependencias
+Bash
 
-```bash
+npm install
+4. Ejecutar el servidor
+Para iniciar el servidor en modo desarrollo (con nodemon para reinicio automático):
+
+Bash
+
 npm run dev
-```
+El servidor se ejecutará en http://localhost:3000.
+La documentación interactiva de la API (Swagger UI) estará disponible en http://localhost:3000/public-api.
 
-Este comando usa `nodemon` para levantar el servidor y reiniciarlo automáticamente cuando se detectan cambios.
-
----
-
-## 📋 Endpoints disponibles
-
-| Método | Endpoint           | Descripción                        |
-|--------|--------------------|------------------------------------|
-| GET    | /api/tasks         | Lista todas las tareas             |
-| POST   | /api/tasks         | Crea una nueva tarea               |
-| PATCH  | /api/tasks/:id     | Alterna estado completado/incompleto |
-| DELETE | /api/tasks/:id     | Elimina una tarea                  |
-
----
-
-## 📁 Estructura del proyecto
-
-```
+📁 Estructura del proyecto
 backend/
 │
-├── controllers/        # Lógica de las tareas (CRUD)
-│   └── taskController.js
+├── controllers/
+│   ├── categoryController.js   # Lógica CRUD para categorías
+│   ├── taskController.js       # Lógica CRUD para tareas
+│   └── userController.js       # Lógica para usuarios (registro, login, administración)
 │
-├── models/             # Esquemas de Mongoose
-│   └── Task.js
+├── middlewares/
+│   ├── authMiddleware.js       # Verificación de JWT para rutas protegidas
+│   └── roleMiddleware.js       # Verificación de roles para acceso a rutas específicas
 │
-├── routes/             # Rutas de la API
-│   └── taskRoutes.js
+├── models/
+│   ├── Category.js             # Esquema de datos para categorías
+│   ├── Task.js                 # Esquema de datos para tareas (con referencia a usuarios y categorías)
+│   └── User.js                 # Esquema de datos para usuarios (con encriptación de contraseña y roles)
 │
-├── middlewares/        # Middlewares personalizados
-│   └── errorHandler.js
+├── routes/
+│   ├── categoryRoutes.js       # Rutas API para la gestión de categorías
+│   ├── taskRoutes.js           # Rutas API para la gestión de tareas
+│   └── userRoutes.js           # Rutas API para autenticación y gestión de usuarios
 │
-├── .env                # Variables de entorno
-├── index.js            # Entrada principal del servidor
-├── package.json        # Configuración del proyecto
-├── README.md           # Esta documentación
-```
+├── .env                        # Variables de entorno
+├── index.js                    # Archivo principal de la aplicación (entry point)
+├── package.json                # Dependencias y scripts del proyecto
+└── swagger.json                # Definición de la API para Swagger UI (si lo tienes)
+🧠 Funcionalidades de la API
+Autenticación de Usuarios:
 
----
+Registro de nuevos usuarios.
 
-## 🛠 Funcionalidades actuales
+Inicio de sesión con generación de JWT.
 
-- CRUD completo de tareas
-- Validación de datos (título obligatorio)
-- Middleware global para manejo de errores
-- Conexión a base de datos MongoDB
-- API REST estructurada y escalable
-- Listo para integrarse con un frontend en React
+Contraseñas encriptadas con bcryptjs.
 
----
+Gestión de Usuarios (Solo Administradores):
 
-## 🎯 En desarrollo
+Listado de todos los usuarios registrados (ruta protegida por rol admin).
 
-- Documentación Swagger en `/public-api` (solo endpoints GET)
-- Sistema de autenticación (registro, login, JWT)
-- Protección de rutas privadas para usuarios registrados
+Gestión de Tareas:
 
----
+Creación de tareas (asociadas al usuario autenticado y a una categoría).
 
-## 👨‍💻 Autor
+Listado de tareas por usuario.
 
-Desarrollado por **Elian Armoa**  
-Proyecto final del curso **Backend Developer - Módulo II**  
-Profesor: **Santiago Rada**
+Actualización del estado de una tarea (completada/incompleta).
 
----
+Eliminación de tareas.
 
-> 💡 Este proyecto está pensado para seguir creciendo. ¡Se aceptan sugerencias, mejoras o integraciones futuras!
+Relación con Categorías utilizando populate de Mongoose.
+
+Gestión de Categorías:
+
+Creación de nuevas categorías.
+
+Listado de todas las categorías.
+
+Actualización de categorías por ID (protegida por rol admin).
+
+Eliminación de categorías por ID (protegida por rol admin).
+
+Middleware de Protección:
+
+Rutas protegidas por token JWT válido.
+
+Rutas protegidas por roles específicos (ej. admin).
+
+📋 Endpoints de la API
+El servidor se ejecuta en http://localhost:3000.
+
+Usuarios (Base: /api/users)
+Método
+
+Ruta
+
+Descripción
+
+Requiere Token
+
+Permisos
+
+POST
+
+/register
+
+Registra un nuevo usuario
+
+No
+
+Público
+
+POST
+
+/login
+
+Inicia sesión y devuelve un token JWT
+
+No
+
+Público
+
+GET
+
+/
+
+Obtiene todos los usuarios
+
+Sí
+
+admin
+
+
+Exportar a Hojas de cálculo
+Ejemplo de POST /api/users/register (Body - JSON):
+
+JSON
+
+{
+  "username": "nuevo_usuario",
+  "password": "passwordSeguro123"
+}
+Ejemplo de POST /api/users/login (Body - JSON):
+
+JSON
+
+{
+  "username": "usuario_existente",
+  "password": "passwordSeguro123"
+}
+Respuesta exitosa:
+
+JSON
+
+{
+  "message": "Login exitoso",
+  "token": "eyJhbGciOiJIUzI1Ni..."
+}
+Tareas (Base: /api/tasks)
+Método
+
+Ruta
+
+Descripción
+
+Requiere Token
+
+Permisos
+
+POST
+
+/
+
+Crea una nueva tarea para el usuario autenticado
+
+Sí
+
+Autenticado
+
+GET
+
+/
+
+Obtiene todas las tareas del usuario autenticado
+
+Sí
+
+Autenticado
+
+PATCH
+
+/:id
+
+Alterna el estado completed de una tarea
+
+Sí
+
+Autenticado
+
+DELETE
+
+/:id
+
+Elimina una tarea por su ID
+
+Sí
+
+Autenticado
+
+
+Exportar a Hojas de cálculo
+Ejemplo de POST /api/tasks (Body - JSON):
+(Asume que ya creaste una categoría y tienes su _id)
+
+JSON
+
+{
+  "title": "Completar informe del proyecto",
+  "description": "Redactar el informe final para la reunión del viernes.",
+  "category": "60d0fe4f5a3e1c0015f8e1a2" // Reemplazar con un ID de categoría válido obtenido de /api/categories
+}
+Categorías (Base: /api/categories)
+Método
+
+Ruta
+
+Descripción
+
+Requiere Token
+
+Permisos
+
+POST
+
+/
+
+Crea una nueva categoría
+
+Sí
+
+Autenticado
+
+GET
+
+/
+
+Obtiene todas las categorías
+
+Sí
+
+Autenticado
+
+PATCH
+
+/:id
+
+Actualiza una categoría por su ID
+
+Sí
+
+admin
+
+DELETE
+
+/:id
+
+Elimina una categoría por su ID
+
+Sí
+
+admin
+
+
+Exportar a Hojas de cálculo
+Ejemplo de POST /api/categories (Body - JSON):
+
+JSON
+
+{
+  "name": "Trabajo"
+}
+Documentación de la API
+Puedes explorar y probar los endpoints de la API de forma interactiva en Swagger UI, accediendo a:
+
+http://localhost:3000/public-api
+
+👨‍💻 Autor
+Desarrollado por Elian Armoa
+Proyecto final del curso Backend Developer - Módulo II
