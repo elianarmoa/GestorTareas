@@ -1,48 +1,48 @@
 /* frontend/src/components/RegisterForm.css */
 
 .register-form-container {
-    background-color: var(--background-lighter); /* Fondo de la tarjeta */
-    padding: var(--spacing-xl); /* Espaciado interno generoso */
+    background-color: var(--background-lighter); /* Fondo de la tarjeta del formulario */
+    padding: var(--spacing-xl); /* Espaciado interno */
     border-radius: var(--border-radius-base); /* Bordes redondeados */
-    box-shadow: var(--shadow-base); /* Sombra para dar profundidad */
+    box-shadow: var(--shadow-base); /* Sombra para profundidad visual */
     width: 100%;
-    max-width: 400px; /* Ancho máximo para el formulario */
+    max-width: 400px; /* Limita el ancho del formulario */
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md); /* Espacio entre elementos del formulario */
+    gap: var(--spacing-md); /* Espacio entre los elementos hijos */
     border: 1px solid var(--border-color); /* Borde sutil */
-    box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+    box-sizing: border-box; /* Incluye padding y borde en las dimensiones */
 }
 
 .register-form-title {
     text-align: center;
-    color: var(--primary-color); /* Color del título, consistente con el tema */
-    margin-bottom: var(--spacing-sm); /* Espacio debajo del título */
+    color: var(--primary-color); /* Color de título principal */
+    margin-bottom: var(--spacing-sm); /* Margen inferior */
     font-size: 1.8em;
     font-weight: 700;
 }
 
 .register-input-group {
-    margin-bottom: var(--spacing-xs); /* Pequeño espacio entre grupos de input */
-    width: 100%; /* Asegura que el grupo de input ocupe todo el ancho */
+    margin-bottom: var(--spacing-xs); /* Espacio entre grupos de input */
+    width: 100%; /* Ocupa todo el ancho disponible */
 }
 
 .register-input {
-    /* Hereda estilos base de input en App.css */
-    box-sizing: border-box; /* Asegura que padding no aumente el ancho total */
-    width: 100%; /* Asegura que el input ocupe todo el ancho disponible */
+    /* Hereda estilos base de input desde App.css */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    width: 100%; /* Ocupa el ancho completo de su contenedor */
 }
 
 .register-button {
-    /* Hereda estilos base de button en App.css */
+    /* Hereda estilos base de botón desde App.css */
     width: 100%; /* Ocupa todo el ancho disponible */
     background-color: var(--accent-color); /* Color de acento para el botón principal */
-    color: var(--text-light);
-    margin-top: var(--spacing-sm); /* Espacio superior para separarlo del último input */
+    color: var(--text-light); /* Color de texto claro */
+    margin-top: var(--spacing-sm); /* Margen superior para separación */
 }
 
 .register-button:hover {
-    background-color: var(--accent-hover-color);
+    background-color: var(--accent-hover-color); /* Color de fondo al pasar el mouse */
 }
 
 .register-message {
@@ -55,19 +55,19 @@
 }
 
 .register-message.success {
-    background-color: var(--success-color);
-    color: var(--text-light);
+    background-color: var(--success-color); /* Color de fondo para mensajes de éxito */
+    color: var(--text-light); /* Color de texto claro */
 }
 
 .register-message.error {
-    background-color: var(--error-color);
-    color: var(--text-light);
+    background-color: var(--error-color); /* Color de fondo para mensajes de error */
+    color: var(--text-light); /* Color de texto claro */
 }
 
 /* Media Queries para responsividad */
 @media (max-width: 480px) {
     .register-form-container {
-        padding: var(--spacing-md);
-        margin: var(--spacing-md); /* Margen para que no se pegue a los bordes de la pantalla pequeña */
+        padding: var(--spacing-md); /* Reduce el padding en pantallas pequeñas */
+        margin: var(--spacing-md); /* Añade margen para evitar pegarse a los bordes */
     }
 }

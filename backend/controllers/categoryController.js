@@ -1,8 +1,8 @@
 // backend/controllers/categoryController.js
 
-const Category = require('../models/categoryModel'); 
+const Category = require('../models/categoryModel'); // Asegurarse de que la ruta al modelo sea correcta
 
-// --- Crear una nueva categoría ---
+// --- Crea una nueva categoría ---
 const createCategory = async (req, res) => {
     try {
         const { name } = req.body;
@@ -11,10 +11,10 @@ const createCategory = async (req, res) => {
             return res.status(400).json({ message: 'El nombre de la categoría es requerido.' });
         }
 
-        // Convertir el nombre a minúsculas y quitar espacios extra para evitar duplicados por case/trim
+        // Normaliza el nombre para evitar duplicados por diferencias de mayúsculas/minúsculas o espacios.
         const normalizedName = name.toLowerCase().trim();
 
-        // Verificar si la categoría ya existe (insensible a mayúsculas/minúsculas y espacios)
+        // Verifica si ya existe una categoría con el nombre normalizado.
         const existingCategory = await Category.findOne({ name: normalizedName });
         if (existingCategory) {
             return res.status(409).json({ message: 'La categoría ya existe.' });
@@ -30,7 +30,7 @@ const createCategory = async (req, res) => {
     }
 };
 
-// --- Obtener todas las categorías ---
+// --- Obtiene todas las categorías ---
 const getAllCategories = async (req, res) => {
     try {
         const categories = await Category.find({});
@@ -41,7 +41,7 @@ const getAllCategories = async (req, res) => {
     }
 };
 
-// --- Actualizar una categoría por ID ---
+// --- Actualiza una categoría por ID ---
 const updateCategory = async (req, res) => {
     try {
         const { id } = req.params;
@@ -53,7 +53,7 @@ const updateCategory = async (req, res) => {
 
         const normalizedName = name.toLowerCase().trim();
 
-        // Opcional: Verificar si el nuevo nombre ya existe en otra categoría
+        // Evita que se actualice una categoría con un nombre que ya existe en otra categoría.
         const existingCategory = await Category.findOne({ name: normalizedName });
         if (existingCategory && existingCategory._id.toString() !== id) {
             return res.status(409).json({ message: 'Ya existe otra categoría con ese nombre.' });
@@ -62,7 +62,7 @@ const updateCategory = async (req, res) => {
         const updatedCategory = await Category.findByIdAndUpdate(
             id,
             { name: normalizedName },
-            { new: true, runValidators: true } // 'new: true' para devolver el documento actualizado, 'runValidators' para ejecutar las validaciones del esquema
+            { new: true, runValidators: true } // 'new: true' para devolver el documento actualizado; 'runValidators' asegura que se apliquen las reglas del esquema.
         );
 
         if (!updatedCategory) {
@@ -76,7 +76,7 @@ const updateCategory = async (req, res) => {
     }
 };
 
-// --- Eliminar una categoría por ID ---
+// --- Elimina una categoría por ID ---
 const deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
@@ -87,13 +87,14 @@ const deleteCategory = async (req, res) => {
             return res.status(404).json({ message: 'Categoría no encontrada.' });
         }
 
-        // CONSIDERACIÓN IMPORTANTE: Si eliminas una categoría, las tareas que la referencian
-        // quedarán con un ID de categoría inválido (o nulo, si tu modelo lo permite).
-        // Podrías añadir lógica aquí para:
-        // 1. Advertir si hay tareas asociadas.
-        // 2. Desvincular tareas (establecer su categoría a null/undefined).
-        // 3. Eliminar tareas asociadas (¡CUIDADO con esto!).
-        // Por simplicidad, aquí solo la elimina.
+        // NOTA: Al eliminar una categoría, las tareas que la referencian quedarán
+        // con una referencia inválida (o nula). En una aplicación más compleja,
+        // se podría considerar:
+        // - Desvincular automáticamente las tareas (ej. CategoryId = null).
+        // - Prevenir la eliminación si hay tareas asociadas.
+        // - Eliminar en cascada las tareas (usar con precaución).
+        // Para este proyecto, se asume que el frontend o el usuario manejará la inconsistencia
+        // o que las tareas no se eliminarán en cascada.
 
         res.status(200).json({ message: 'Categoría eliminada exitosamente.' });
     } catch (error) {

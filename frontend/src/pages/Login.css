@@ -2,20 +2,22 @@
 
 .login-page-wrapper {
     display: flex;
-    justify-content: center; /* Centra horizontalmente el contenido */
-    align-items: center; /* Centra verticalmente el contenido */
-    min-height: calc(100vh - var(--navbar-height, 60px)); /* Ocupa el espacio restante de la pantalla, ajustando por la navbar */
-    padding: var(--spacing-lg); /* Espaciado general alrededor */
-    background-color: var(--background-light); /* Fondo de la página, del tema global */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    /* Ocupa el espacio restante de la ventana, restando la altura de la barra de navegación */
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    padding: var(--spacing-lg); /* Espaciado interno general del contenedor */
+    background-color: var(--background-light); /* Color de fondo de la página, adaptado al tema global */
 }
 
-/* El estilo de la tarjeta del formulario de login se definirá en LoginForm.css */
-/* Aquí solo nos aseguramos de que la página contenga el formulario de manera centrada */
+/* Los estilos específicos de la tarjeta del formulario de login se gestionan en `LoginForm.css`.
+   Este archivo solo asegura el posicionamiento centrado del formulario en la página. */
 
 @media (max-width: 768px) {
     .login-page-wrapper {
-        padding: var(--spacing-md);
-        /* En pantallas pequeñas, podría ser útil alinear arriba en lugar de centrar verticalmente */
-        /* align-items: flex-start; */ 
+        padding: var(--spacing-md); /* Reduce el padding en pantallas más pequeñas */
+        /* Opcional: Para pantallas pequeñas, alinear el contenido en la parte superior puede ser preferible
+           en lugar de centrarlo verticalmente, dependiendo del diseño.
+           align-items: flex-start; */ 
     }
 }

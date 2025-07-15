@@ -3,30 +3,32 @@
 const express = require('express');
 const router = express.Router();
 const categoryController = require('../controllers/categoryController');
-const authMiddleware = require('../middlewares/authMiddleware'); // Middleware para verificar token JWT
-const authorizeRole = require('../middlewares/roleMiddleware'); // Middleware para verificar rol (si decides que solo admins gestionen categorías)
+const authMiddleware = require('../middlewares/authMiddleware');    // Middleware para verificar el token JWT
+const authorizeRole = require('../middlewares/roleMiddleware'); // Middleware para verificar roles de usuario
 
-// NOTA: Para la gestión de categorías, es común permitir que cualquier usuario autenticado
-// las vea (GET), pero restringir la creación, actualización o eliminación a roles específicos (ej. 'admin').
-// Aquí las protejo todas con authMiddleware, y puedes añadir authorizeRole(['admin']) donde lo necesites.
+/**
+ * Rutas para la gestión de categorías.
+ * Se utilizan middlewares de autenticación y autorización para proteger los endpoints.
+ * Por convención, cualquier usuario autenticado puede ver las categorías,
+ * mientras que la creación, actualización y eliminación se restringen a administradores.
+ */
 
-// --- Rutas Protegidas (Requieren autenticación) ---
+// --- Rutas Protegidas ---
 
-// POST /api/categories → Crear una nueva categoría
-// Podrías añadir authorizeRole(['admin']) aquí si solo los administradores pueden crear categorías
-router.post('/', authMiddleware, categoryController.createCategory);
+// POST /api/categories
+// Crea una nueva categoría. Requiere autenticación y rol de 'admin'.
+router.post('/', authMiddleware, authorizeRole(['admin']), categoryController.createCategory);
 
-// GET /api/categories → Obtener todas las categorías
-// Es común que cualquier usuario autenticado pueda ver las categorías
+// GET /api/categories
+// Obtiene todas las categorías disponibles. Requiere autenticación.
 router.get('/', authMiddleware, categoryController.getAllCategories);
 
-// PATCH /api/categories/:id → Actualizar una categoría por su ID
-// Debería ser solo para administradores
+// PATCH /api/categories/:id
+// Actualiza una categoría específica por su ID. Requiere autenticación y rol de 'admin'.
 router.patch('/:id', authMiddleware, authorizeRole(['admin']), categoryController.updateCategory);
 
-// DELETE /api/categories/:id → Eliminar una categoría por su ID
-// Definitivamente solo para administradores
+// DELETE /api/categories/:id
+// Elimina una categoría específica por su ID. Requiere autenticación y rol de 'admin'.
 router.delete('/:id', authMiddleware, authorizeRole(['admin']), categoryController.deleteCategory);
-
 
 module.exports = router;

@@ -2,81 +2,81 @@
 
 .navbar {
     display: flex;
-    justify-content: space-between; /* Alinea marca a la izquierda y enlaces a la derecha */
+    justify-content: space-between; /* Alinea elementos a los extremos (marca izq, enlaces der) */
     align-items: center; /* Centra verticalmente los elementos */
-    background-color: var(--primary-color); /* Color principal del tema */
-    color: var(--text-light); /* Color de texto claro para la navbar */
+    background-color: var(--primary-color); /* Color de fondo principal del tema */
+    color: var(--text-light); /* Color de texto para contraste en la barra */
     padding: var(--spacing-sm) var(--spacing-md); /* Espaciado interno */
-    box-shadow: var(--shadow-base); /* Sombra sutil para darle profundidad */
-    min-height: 60px; /* Altura mínima para la navbar */
-    position: sticky; /* Se mantiene en la parte superior */
+    box-shadow: var(--shadow-base); /* Sombra para dar elevación */
+    min-height: 60px; /* Altura mínima de la barra de navegación */
+    position: sticky; /* Permanece en la parte superior al hacer scroll */
     top: 0;
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    z-index: 1000; /* Asegura que se superponga a otros elementos */
 }
 
 .navbar-brand a {
-    color: var(--text-light); /* Color de texto para el nombre de la marca */
-    font-size: 1.5em; /* Tamaño de fuente más grande para la marca */
+    color: var(--text-light); /* Color del texto de la marca */
+    font-size: 1.5em; /* Tamaño de fuente para la marca */
     font-weight: 700;
-    text-decoration: none; /* Elimina el subrayado por defecto de los enlaces */
+    text-decoration: none; /* Elimina el subrayado por defecto */
     transition: color 0.2s ease-in-out;
 }
 
 .navbar-brand a:hover {
-    color: var(--background-lighter); /* Ligero cambio de color al pasar el mouse */
+    color: var(--background-lighter); /* Cambio de color sutil al pasar el mouse */
 }
 
 .navbar-links {
-    list-style: none; /* Elimina los puntos de la lista */
+    list-style: none; /* Elimina los marcadores de lista */
     margin: 0;
     padding: 0;
     display: flex;
     align-items: center;
-    gap: var(--spacing-md); /* Espacio entre los elementos de la lista */
+    gap: var(--spacing-md); /* Espacio entre los elementos de navegación */
 }
 
 .navbar-links li a {
-    color: var(--text-light); /* Color de texto para los enlaces de la navbar */
+    color: var(--text-light); /* Color de texto para los enlaces */
     text-decoration: none;
     font-size: 1em;
     font-weight: 500;
-    padding: var(--spacing-xs) var(--spacing-sm); /* Padding para hacer los enlaces más clickeables */
+    padding: var(--spacing-xs) var(--spacing-sm); /* Padding para aumentar el área clickeable */
     border-radius: var(--border-radius-base); /* Ligero redondeo */
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
 .navbar-links li a:hover {
-    background-color: var(--primary-hover-color); /* Fondo al pasar el mouse */
+    background-color: var(--primary-hover-color); /* Color de fondo al pasar el mouse */
     color: var(--text-light);
 }
 
 .navbar-button {
-    /* Hereda estilos base de button de App.css */
-    padding: var(--spacing-xs) var(--spacing-sm); /* Padding específico para botones de la navbar */
+    /* Hereda estilos base de botón, se personaliza para la barra de navegación */
+    padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 0.9em;
-    background-color: var(--accent-color); /* Usar color de acento para el botón */
+    background-color: var(--accent-color); /* Utiliza el color de acento del tema */
     color: var(--text-light);
 }
 
 .navbar-button:hover {
     background-color: var(--accent-hover-color);
-    transform: none; /* Desactiva la animación translateY para botones en navbar */
-    box-shadow: none; /* Desactiva la sombra para botones en navbar */
+    transform: none; /* Desactiva transformaciones heredadas de App.css al hover */
+    box-shadow: none; /* Desactiva sombras heredadas de App.css al hover */
 }
 
 .logout-button {
-    background-color: var(--error-color); /* Rojo para el botón de cerrar sesión */
+    background-color: var(--error-color); /* Color distintivo para el botón de cerrar sesión */
 }
 
 .logout-button:hover {
-    background-color: #c82333; /* Tono más oscuro de rojo al hover */
+    background-color: #c82333; /* Tono más oscuro al pasar el mouse */
 }
 
 /* Media Queries para responsividad */
 @media (max-width: 768px) {
     .navbar {
-        flex-direction: column; /* Apila elementos en pantallas pequeñas */
-        align-items: flex-start;
+        flex-direction: column; /* Apila los elementos verticalmente */
+        align-items: flex-start; /* Alinea los elementos al inicio */
         padding: var(--spacing-md);
     }
 
@@ -87,20 +87,20 @@
     }
     
     .navbar-links {
-        flex-wrap: wrap; /* Permite que los elementos de la lista salten de línea */
-        justify-content: center; /* Centra los enlaces */
-        width: 100%; /* Ocupa todo el ancho */
+        flex-wrap: wrap; /* Permite que los elementos se distribuyan en varias líneas */
+        justify-content: center; /* Centra los enlaces horizontalmente */
+        width: 100%;
         gap: var(--spacing-sm);
     }
 
     .navbar-links li {
-        width: auto; /* Permite que los elementos de la lista tengan su ancho natural */
+        width: auto; /* Permite que cada elemento tome su ancho necesario */
     }
 
     .navbar-links li a,
     .navbar-button {
-        width: auto; /* Deja que el contenido decida el ancho */
-        flex-grow: 1; /* Permite que los enlaces/botones se estiren */
+        width: auto; /* El ancho se ajusta al contenido */
+        flex-grow: 1; /* Permite que los elementos se estiren para ocupar el espacio */
         text-align: center;
     }
 }

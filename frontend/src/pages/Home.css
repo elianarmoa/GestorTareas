@@ -3,24 +3,25 @@
 .home-page-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra horizontalmente el contenido */
-    padding: var(--spacing-lg); /* Espaciado general alrededor de la página */
-    min-height: calc(100vh - var(--navbar-height, 60px)); /* Ajusta la altura para ocupar el espacio restante */
-    background-color: var(--background-light); /* Fondo de la página, del tema global */
-    color: var(--text-dark); /* Color de texto del tema global */
+    align-items: center; /* Centra el contenido horizontalmente */
+    padding: var(--spacing-lg); /* Espaciado interno general de la página */
+    /* Ajusta la altura para ocupar el espacio restante de la ventana, excluyendo la altura de la navbar */
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    background-color: var(--background-light); /* Color de fondo de la página, del tema global */
+    color: var(--text-dark); /* Color de texto principal, del tema global */
 }
 
-/* Contenedor principal de la tarjeta de tareas */
+/* Contenedor principal para el contenido, actúa como una tarjeta */
 .home-content-card {
     background-color: var(--background-lighter); /* Fondo más claro para la tarjeta */
-    padding: var(--spacing-xl); /* Espaciado dentro de la tarjeta */
+    padding: var(--spacing-xl); /* Espaciado interno de la tarjeta */
     border-radius: var(--border-radius-base); /* Bordes redondeados */
-    box-shadow: var(--shadow-base); /* Sombra para dar profundidad */
+    box-shadow: var(--shadow-base); /* Sombra para dar profundidad visual */
     width: 100%;
-    max-width: 800px; /* Ancho máximo para la tarjeta, la hace responsive */
-    margin-top: var(--spacing-md); /* Margen superior para separarlo del título/navbar */
-    border: 1px solid var(--border-color); /* Borde sutil */
-    text-align: center; /* Centrar el texto por defecto */
+    max-width: 800px; /* Ancho máximo para la tarjeta, optimizado para responsividad */
+    margin-top: var(--spacing-md); /* Margen superior para separarlo de elementos superiores (ej. título, navbar) */
+    border: 1px solid var(--border-color); /* Borde sutil para la tarjeta */
+    text-align: center; /* Centra el texto dentro de la tarjeta por defecto */
 }
 
 .home-content-card h1 {
@@ -30,18 +31,18 @@
     font-weight: 700;
 }
 
-/* Media Queries para responsividad si es necesario */
+/* Media Queries para responsividad */
 @media (max-width: 768px) {
     .home-page-container {
-        padding: var(--spacing-md);
+        padding: var(--spacing-md); /* Reduce el padding general en pantallas más pequeñas */
     }
     .home-content-card {
-        padding: var(--spacing-lg);
-        max-width: 100%;
-        border-radius: 0; /* Sin bordes redondeados en móviles si se prefiere full-width */
+        padding: var(--spacing-lg); /* Reduce el padding interno de la tarjeta */
+        max-width: 100%; /* Permite que la tarjeta ocupe todo el ancho disponible */
+        border-radius: 0; /* Opcional: Elimina los bordes redondeados en móviles para un diseño de borde a borde */
     }
     .home-content-card h1 {
-        font-size: 1.8em;
-        margin-bottom: var(--spacing-md);
+        font-size: 1.8em; /* Reduce el tamaño de la fuente del título */
+        margin-bottom: var(--spacing-md); /* Ajusta el margen inferior del título */
     }
 }

@@ -1,38 +1,35 @@
 /* frontend/src/components/DarkModeToggle.css */
 
 .dark-mode-toggle {
-    /* Hereda muchos estilos base de button en App.css */
-    /* Sobreescribimos algunos para que sea más un botón de ícono */
-    background: transparent; /* Fondo transparente por defecto */
-    border: none; /* Sin borde */
-    color: var(--text-light); /* Color del icono, del tema de la navbar */
+    /* Base para un botón de ícono, sobrescribe estilos heredados si es necesario */
+    background: transparent;
+    border: none;
+    color: var(--text-light); /* Color del icono, adaptado al tema de la barra de navegación */
     font-size: 1.5em; /* Tamaño del icono */
-    padding: var(--spacing-xs); /* Pequeño padding alrededor del icono */
-    line-height: 1; /* Asegura que el icono no tenga espacio extra */
-    border-radius: var(--border-radius-base); /* Ligero redondeo */
+    padding: var(--spacing-xs);
+    line-height: 1; /* Elimina espacio extra alrededor del icono */
+    border-radius: var(--border-radius-base);
     transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-    display: flex; /* Para centrar el icono si es necesario */
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px; /* Ancho fijo para un botón cuadrado */
-    height: 40px; /* Altura fija para un botón cuadrado */
-    flex-shrink: 0; /* Evita que se encoja en layouts flexibles */
+    width: 40px; /* Tamaño fijo para un botón cuadrado */
+    height: 40px;
+    flex-shrink: 0; /* Previene el encogimiento en layouts flexibles */
 }
 
 .dark-mode-toggle:hover {
-    background-color: var(--primary-hover-color); /* Fondo al pasar el mouse, del mismo color que los enlaces de la navbar */
+    background-color: var(--primary-hover-color); /* Fondo al pasar el mouse, adaptado al tema */
     color: var(--text-light);
-    transform: none; /* Desactiva la animación translateY de App.css */
-    box-shadow: none; /* Desactiva la sombra de App.css */
+    transform: none; /* Desactiva transformaciones de App.css al hover */
+    box-shadow: none; /* Desactiva sombras de App.css al hover */
 }
 
-/* En modo oscuro, si el color del texto de la navbar cambia, este botón también lo hará */
-/* No necesitamos reglas específicas para :hover en .dark-mode-toggle para el modo oscuro,
-   ya que var(--primary-hover-color) y var(--text-light) se adaptarán automáticamente
-   cuando body.dark-mode esté activo. */
+/* El manejo de modos oscuro/claro se adapta automáticamente mediante variables CSS (CSS Custom Properties).
+   No se requieren reglas específicas para :hover en .dark-mode-toggle en modo oscuro,
+   ya que las variables --primary-hover-color y --text-light se ajustan con body.dark-mode. */
 
-/* Ajustes de accesibilidad/visuales si es necesario para el enfoque */
 .dark-mode-toggle:focus-visible {
-    outline: 2px solid var(--accent-color); /* Contorno al enfocar con teclado */
+    outline: 2px solid var(--accent-color); /* Contorno de accesibilidad al enfocar con teclado */
     outline-offset: 2px;
 }

@@ -1,33 +1,33 @@
 :root {
     /* Colores primarios y de acento */
-    --primary-color: #34495e; /* Azul oscuro/grisáceo, muy profesional */
-    --primary-hover-color: #2c3e50; /* Tono más oscuro para hover */
-    --accent-color: #3498db; /* Un azul más vibrante para enlaces/botones importantes */
-    --accent-hover-color: #2980b9; /* Hover para el acento */
+    --primary-color: #34495e; /* Azul oscuro/grisáceo, profesional y base */
+    --primary-hover-color: #2c3e50; /* Tono más oscuro para estados hover de elementos primarios */
+    --accent-color: #3498db; /* Azul vibrante para elementos interactivos y destacados */
+    --accent-hover-color: #2980b9; /* Tono de acento más oscuro para hover */
 
     /* Colores de fondo */
-    --background-light: #f8f9fa; /* Fondo general claro, suave */
-    --background-lighter: #ffffff; /* Fondo para tarjetas/componentes, blanco puro */
-    --background-dark-mode: #2c3e50; /* Fondo general oscuro */
+    --background-light: #f8f9fa; /* Fondo general claro de la aplicación */
+    --background-lighter: #ffffff; /* Fondo para tarjetas y componentes internos, blanco puro */
+    --background-dark-mode: #2c3e50; /* Fondo general en modo oscuro */
     --background-darker-mode: #34495e; /* Fondo para tarjetas/componentes en modo oscuro */
 
     /* Colores de texto */
-    --text-dark: #343a40; /* Texto principal oscuro */
-    --text-light: #ffffff; /* Texto claro (para fondos oscuros) */
-    --text-secondary: #6c757d; /* Texto secundario/desactivado */
+    --text-dark: #343a40; /* Color de texto principal para fondos claros */
+    --text-light: #ffffff; /* Color de texto para fondos oscuros (ej. botones, navbar) */
+    --text-secondary: #6c757d; /* Color de texto para información secundaria o desactivada */
 
     /* Bordes y sombras */
-    --border-color: #e9ecef; /* Borde muy sutil y claro */
-    --shadow-base: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave y sutil */
+    --border-color: #e9ecef; /* Color de borde muy sutil */
+    --shadow-base: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave para elementos elevados */
     --shadow-dark: 0 6px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada para modo oscuro */
 
-    /* Colores de estado (éxito, error, info) */
-    --success-color: #28a745;
-    --error-color: #dc3545;
-    --info-color: #17a2b8;
+    /* Colores de estado (éxito, error, información) */
+    --success-color: #28a745; /* Verde para mensajes de éxito */
+    --error-color: #dc3545; /* Rojo para mensajes de error */
+    --info-color: #17a2b8; /* Azul cian para mensajes informativos */
 
-    /* Espaciados y radios */
-    --border-radius-base: 8px;
+    /* Espaciados y radios de borde */
+    --border-radius-base: 8px; /* Radio de borde estándar */
     --spacing-xs: 8px;
     --spacing-sm: 12px;
     --spacing-md: 20px;
@@ -35,95 +35,97 @@
     --spacing-xl: 40px;
 }
 
-/* Tema Oscuro: Sobrescribe las variables cuando la clase 'dark-mode' está presente en el body */
+/* Tema Oscuro: Sobrescribe las variables CSS cuando la clase 'dark-mode' está aplicada al body */
 body.dark-mode {
-    --primary-color: #6c757d; /* Gris oscuro para el modo oscuro */
+    --primary-color: #6c757d; /* Color principal más claro para el modo oscuro */
     --primary-hover-color: #5a6268;
-    --accent-color: #60a5fa; /* Azul claro para acento en oscuro */
+    --accent-color: #60a5fa; /* Azul claro vibrante para acentos en oscuro */
     --accent-hover-color: #3b82f6;
 
-    --background-light: var(--background-dark-mode);
-    --background-lighter: var(--background-darker-mode);
+    --background-light: var(--background-dark-mode); /* Asigna el fondo general oscuro */
+    --background-lighter: var(--background-darker-mode); /* Asigna el fondo más oscuro para componentes */
     --text-dark: #f8f9fa; /* Texto principal claro */
     --text-light: #ffffff;
-    --text-secondary: #adb5bd;
+    --text-secondary: #adb5bd; /* Texto secundario más claro */
 
-    --border-color: #495057;
-    --shadow-base: var(--shadow-dark);
+    --border-color: #495057; /* Color de borde más oscuro */
+    --shadow-base: var(--shadow-dark); /* Utiliza la sombra más pronunciada */
 }
 
-/* Reset básico y estilos globales */
+/* Reset básico y estilos globales para la aplicación */
 html, body, #root {
     margin: 0;
     padding: 0;
     height: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Incluye padding y borde en el tamaño final del elemento */
+    /* Define una pila de fuentes para asegurar consistencia y legibilidad */
     font-family: 'Inter', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    /* Transición suave para el cambio de tema */
+    -webkit-font-smoothing: antialiased; /* Mejora el suavizado de fuentes en Webkit */
+    -moz-osx-font-smoothing: grayscale; /* Mejora el suavizado de fuentes en Firefox */
+    /* Aplica una transición suave a los cambios de color de fondo y texto para el tema */
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 body {
-    background-color: var(--background-light);
-    color: var(--text-dark);
-    line-height: 1.6;
+    background-color: var(--background-light); /* Aplica el color de fondo del tema */
+    color: var(--text-dark); /* Aplica el color de texto del tema */
+    line-height: 1.6; /* Espaciado de línea para legibilidad */
 }
 
 /* Estilos de enlaces globales */
 a {
-    color: var(--accent-color); /* Usamos el color de acento para enlaces */
-    text-decoration: none;
-    transition: color 0.2s ease-in-out;
+    color: var(--accent-color); /* Utiliza el color de acento para los enlaces */
+    text-decoration: none; /* Elimina el subrayado por defecto */
+    transition: color 0.2s ease-in-out; /* Transición suave para el color del texto */
 }
 
 a:hover {
-    color: var(--accent-hover-color);
-    text-decoration: underline;
+    color: var(--accent-hover-color); /* Cambio de color al pasar el mouse */
+    text-decoration: underline; /* Subraya el enlace al pasar el mouse */
 }
 
 /* Estilos de botones base */
 button {
-    cursor: pointer;
-    /* REINICIA LAS PROPIEDADES PREDETERMINADAS DEL NAVEGADOR */
-    appearance: none; /* Crucial para resetear estilos nativos */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+    /* Reinicia las propiedades predeterminadas del navegador para botones */
+    appearance: none; /* Crucial para resetear estilos nativos en la mayoría de navegadores */
     -webkit-appearance: none; /* Para navegadores basados en Webkit */
     -moz-appearance: none; /* Para Firefox */
     
-    border: none; /* Asegura que no haya borde predeterminado */
-    outline: none; /* Elimina el contorno al hacer focus */
+    border: none; /* Elimina el borde predeterminado */
+    outline: none; /* Elimina el contorno de enfoque predeterminado */
     background-color: var(--primary-color); /* Color de fondo base para botones */
     color: var(--text-light); /* Color de texto base para botones */
 
-    border-radius: var(--border-radius-base);
-    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-base); /* Aplica el radio de borde estándar */
+    padding: var(--spacing-sm) var(--spacing-md); /* Espaciado interno del botón */
     font-size: 1em;
     font-weight: 600;
+    /* Transiciones suaves para interactividad */
     transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out, box-shadow 0.2s ease-in-out;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
+    display: inline-flex; /* Permite alinear contenido y usar gap */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    gap: var(--spacing-xs); /* Espacio entre elementos internos del botón (ej. texto e ícono) */
 }
 
 button:hover {
-    background-color: var(--primary-hover-color);
-    transform: translateY(-1px);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-hover-color); /* Cambio de color al pasar el mouse */
+    transform: translateY(-1px); /* Ligero levantamiento al pasar el mouse */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil al pasar el mouse */
 }
 
 button:active {
-    transform: translateY(0);
-    box-shadow: none;
+    transform: translateY(0); /* Vuelve a la posición original al hacer click */
+    box-shadow: none; /* Elimina la sombra al hacer click */
 }
 
 button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-    background-color: var(--text-secondary); /* Un color para botones deshabilitados */
+    opacity: 0.6; /* Reduce la opacidad para indicar que está deshabilitado */
+    cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+    transform: none; /* Desactiva la transformación */
+    box-shadow: none; /* Desactiva la sombra */
+    background-color: var(--text-secondary); /* Color de fondo para botones deshabilitados */
     color: var(--text-light);
 }
 
@@ -133,38 +135,41 @@ input[type="password"],
 input[type="email"],
 input[type="number"],
 textarea {
-    width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-base);
+    width: 100%; /* Ocupa el ancho completo de su contenedor */
+    padding: var(--spacing-sm) var(--spacing-md); /* Espaciado interno */
+    border: 1px solid var(--border-color); /* Borde sutil */
+    border-radius: var(--border-radius-base); /* Bordes redondeados */
     font-size: 1em;
-    color: var(--text-dark);
-    background-color: var(--background-lighter);
+    color: var(--text-dark); /* Color de texto del tema */
+    background-color: var(--background-lighter); /* Fondo del input */
     box-sizing: border-box; /* Incluye padding y borde en el ancho/alto */
+    /* Transiciones suaves para los cambios de estilo */
     transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+/* Estilos para el placeholder de los inputs */
 input[type="text"]::placeholder,
 input[type="password"]::placeholder,
 input[type="email"]::placeholder,
 input[type="number"]::placeholder,
 textarea::placeholder {
-    color: var(--text-secondary);
-    opacity: 0.7;
+    color: var(--text-secondary); /* Color de texto secundario para el placeholder */
+    opacity: 0.7; /* Opacidad para hacerlo más sutil */
 }
 
+/* Estilos para el estado de enfoque (focus) de los inputs */
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus,
 input[type="number"]:focus,
 textarea:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); /* Sombra de enfoque con color de acento */
+    outline: none; /* Elimina el contorno predeterminado del navegador */
+    border-color: var(--accent-color); /* Cambia el color del borde a acento */
+    /* Añade una sombra de enfoque con el color de acento */
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-
-/* Mensajes de feedback genéricos */
+/* Mensajes de feedback genéricos (éxito, error, información) */
 .message-container {
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-base);
@@ -175,16 +180,16 @@ textarea:focus {
 }
 
 .message-success {
-    background-color: var(--success-color);
-    color: var(--text-light);
+    background-color: var(--success-color); /* Fondo verde para éxito */
+    color: var(--text-light); /* Texto claro */
 }
 
 .message-error {
-    background-color: var(--error-color);
-    color: var(--text-light);
+    background-color: var(--error-color); /* Fondo rojo para error */
+    color: var(--text-light); /* Texto claro */
 }
 
 .message-info {
-    background-color: var(--info-color);
-    color: var(--text-light);
+    background-color: var(--info-color); /* Fondo azul cian para información */
+    color: var(--text-light); /* Texto claro */
 }

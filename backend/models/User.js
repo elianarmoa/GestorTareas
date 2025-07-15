@@ -2,24 +2,26 @@
 
 const mongoose = require('mongoose');
 
+// Define el esquema para el modelo de Usuario
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
-        unique: true,
-        trim: true
+        required: [true, 'El nombre de usuario es obligatorio.'], // Mensaje de error personalizado
+        unique: true, // Garantiza que cada nombre de usuario sea único
+        trim: true    // Elimina espacios en blanco al inicio y al final
     },
     password: {
         type: String,
-        required: true
+        required: [true, 'La contraseña es obligatoria.'] // Mensaje de error personalizado
     },
-    role: { 
+    role: {
         type: String,
-        enum: ['user', 'admin'], // Define los roles posibles
-        default: 'user' // Establece 'user' como rol por defecto para nuevos registros
+        enum: ['user', 'admin'], // Restringe los valores permitidos a 'user' o 'admin'
+        default: 'user' // Asigna 'user' como rol por defecto a los nuevos usuarios
     }
 }, {
-    timestamps: true 
+    timestamps: true // Añade automáticamente los campos 'createdAt' y 'updatedAt' para seguimiento
 });
 
+// Exporta el modelo 'User' para su uso en los controladores y otros módulos
 module.exports = mongoose.model('User', userSchema);

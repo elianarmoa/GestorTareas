@@ -4,78 +4,88 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Registrar un nuevo usuario
+// --- Registra un nuevo usuario ---
 const registerUser = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        if (!username || !password)
-            return res.status(400).json({ error: 'Nombre de usuario y contraseña requeridos' });
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Nombre de usuario y contraseña son requeridos.' });
+        }
 
+        // Verifica si el nombre de usuario ya está en uso para evitar duplicados.
         const userExists = await User.findOne({ username });
-        if (userExists)
-            return res.status(400).json({ error: 'El usuario ya existe' });
+        if (userExists) {
+            return res.status(400).json({ error: 'El nombre de usuario ya está registrado.' });
+        }
 
+        // Hashea la contraseña antes de guardarla en la base de datos para seguridad.
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Al crear un nuevo usuario, el 'role' por defecto es 'user' (definido en el modelo User.js)
+        // Crea un nuevo usuario con la contraseña hasheada.
+        // El rol por defecto ('user') se define en el esquema del modelo User.
         const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
 
-        res.status(201).json({ message: 'Usuario registrado correctamente' });
+        res.status(201).json({ message: 'Usuario registrado correctamente.' });
     } catch (err) {
-        console.error("Error en el registro:", err); // Agrega log para depuración
-        res.status(500).json({ error: 'Error en el registro' });
+        console.error("Error en el registro de usuario:", err); // Log para depuración
+        res.status(500).json({ error: 'Error interno del servidor durante el registro.' });
     }
 };
 
-// Iniciar sesión de usuario
+// --- Inicia sesión de usuario ---
 const loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
 
-        if (!username || !password)
-            return res.status(400).json({ error: 'Nombre de usuario y contraseña requeridos' });
+        if (!username || !password) {
+            return res.status(400).json({ error: 'Nombre de usuario y contraseña son requeridos.' });
+        }
 
+        // Busca el usuario por su nombre de usuario.
         const user = await User.findOne({ username });
-        if (!user)
-            return res.status(400).json({ error: 'Usuario no encontrado' });
+        if (!user) {
+            return res.status(400).json({ error: 'Credenciales inválidas.' }); // Mensaje genérico por seguridad
+        }
 
+        // Compara la contraseña proporcionada con la contraseña hasheada en la base de datos.
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch)
-            return res.status(400).json({ error: 'Contraseña incorrecta' });
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Credenciales inválidas.' }); // Mensaje genérico por seguridad
+        }
 
-        // GENERACIÓN DEL TOKEN: ¡Asegúrate de incluir el 'role' del usuario aquí!
+        // Genera un token JWT incluyendo el ID, nombre de usuario y **rol** del usuario.
+        // El rol es crucial para la autorización basada en roles en el middleware.
         const token = jwt.sign(
-            { userId: user._id, username: user.username, role: user.role }, // <-- ¡IMPORTANTE! Añadido 'role: user.role'
+            { userId: user._id, username: user.username, role: user.role },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '1h' } // Token expira en 1 hora
         );
 
-        res.status(200).json({ message: 'Login exitoso', token });
+        res.status(200).json({ message: 'Inicio de sesión exitoso.', token, role: user.role }); // Incluye el rol en la respuesta
     } catch (err) {
-        console.error("Error en el login:", err); // Agrega log para depuración
-        res.status(500).json({ error: 'Error en el login' });
+        console.error("Error en el inicio de sesión:", err); // Log para depuración
+        res.status(500).json({ error: 'Error interno del servidor durante el inicio de sesión.' });
     }
 };
 
-// NUEVA FUNCIÓN: Obtener todos los usuarios (protegida para administradores)
+// --- Obtiene todos los usuarios (requiere rol de administrador) ---
 const getAllUsers = async (req, res) => {
     try {
-        // En este punto, el `roleMiddleware` ya habrá verificado que `req.user.role` es 'admin'.
-        // No necesitamos filtrar por el ID del usuario logueado, ya que el objetivo es listar TODOS.
-        // Seleccionamos todos los usuarios y excluimos el campo 'password' por seguridad.
+        // Esta ruta está protegida por `roleMiddleware` que asegura que `req.user.role` sea 'admin'.
+        // Se excluye el campo 'password' de los resultados por motivos de seguridad.
         const users = await User.find().select('-password');
         res.status(200).json(users);
     } catch (err) {
-        console.error("Error al obtener usuarios:", err); // Agrega log para depuración
-        res.status(500).json({ error: 'Error del servidor al obtener usuarios.' });
+        console.error("Error al obtener usuarios:", err); // Log para depuración
+        res.status(500).json({ error: 'Error interno del servidor al obtener usuarios.' });
     }
 };
 
-// Exportamos todas las funciones del controlador
+// Exporta todas las funciones del controlador
 module.exports = {
     registerUser,
     loginUser,
-    getAllUsers 
+    getAllUsers
 };

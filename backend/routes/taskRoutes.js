@@ -3,33 +3,37 @@
 const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/taskController');
-const authMiddleware = require('../middlewares/authMiddleware'); // Asegúrate de que esta ruta es correcta (middlewares vs middleware)
+const authMiddleware = require('../middlewares/authMiddleware'); // Middleware para verificar el token JWT
 
-// Middleware de autenticación para proteger las rutas que lo necesiten
-// Se aplica 'authMiddleware' ANTES de la función del controlador en las rutas protegidas.
+/**
+ * Rutas para la gestión de tareas.
+ * Todos los endpoints de tareas aquí definidos requieren autenticación.
+ * Las tareas están asociadas a un usuario específico.
+ */
 
 // --- Rutas Protegidas (Requieren autenticación) ---
-// Estas rutas solo serán accesibles si el usuario está correctamente autenticado.
 
-// POST /api/tasks → Crear una nueva tarea
+// POST /api/tasks
+// Crea una nueva tarea asociada al usuario autenticado.
 router.post('/', authMiddleware, taskController.createTask);
 
-// PATCH /api/tasks/:id → Alternar el estado (completado/incompleto) de una tarea por su ID
-router.patch('/:id', authMiddleware, taskController.toggleTask);
-
-// GET /api/tasks → Obtener todas las tareas del usuario autenticado
-// Esta es la ruta para listar tareas del usuario logueado, y es PROTEGIDA.
+// GET /api/tasks
+// Obtiene todas las tareas que pertenecen al usuario autenticado.
 router.get('/', authMiddleware, taskController.getAllTasks);
 
-// DELETE /api/tasks/:id → Eliminar una tarea por su ID
+// PATCH /api/tasks/:id
+// Alterna el estado (completado/incompleto) de una tarea específica por su ID.
+// Asegura que la tarea pertenezca al usuario autenticado.
+router.patch('/:id', authMiddleware, taskController.toggleTask);
+
+// DELETE /api/tasks/:id
+// Elimina una tarea específica por su ID.
+// Asegura que la tarea pertenezca al usuario autenticado.
 router.delete('/:id', authMiddleware, taskController.deleteTask);
 
-// --- CONSIDERACIÓN IMPORTANTE ---
-// Si necesitas una ruta GET de tareas que *no* requiera autenticación,
-// DEBERÍAS CREAR UN ENDPOINT DIFERENTE con un path distinto, por ejemplo:
-// router.get('/public-tasks', taskController.getPublicTasks);
-// En ese caso, 'getPublicTasks' en tu controlador *no* debería filtrar por req.user.id.
-// Si no te lo piden específicamente como "público" y con acceso sin token,
-// la mejor práctica es mantener todo lo relacionado a tareas del usuario, protegido.
+// NOTA: Si se necesitara un endpoint para tareas públicas (sin autenticación),
+// se debería crear una ruta separada (ej. `/api/public/tasks`)
+// con un controlador que no filtre por `userId`. Actualmente, todas las operaciones
+// de tareas están vinculadas al usuario autenticado.
 
 module.exports = router;

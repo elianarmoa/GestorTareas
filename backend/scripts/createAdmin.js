@@ -1,32 +1,43 @@
 // backend/scripts/createAdmin.js
-require('dotenv').config({ path: './.env' }); // Asegúrate de que cargue el .env correctamente
+
+// Carga las variables de entorno desde el archivo .env
+require('dotenv').config({ path: './.env' });
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User'); // Asegúrate de que la ruta sea correcta desde scripts/
+const User = require('../models/User'); // Asegura la ruta correcta al modelo de Usuario
 
+/**
+ * Script para crear o actualizar un usuario administrador por defecto.
+ * Útil para configuraciones de "zero-config" o entornos de desarrollo/pruebas.
+ */
 const createAdminUser = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, {});
+        // Conexión a la base de datos MongoDB
+        await mongoose.connect(process.env.MONGO_URI);
         console.log('✅ Conectado a MongoDB');
 
         const adminUsername = 'Administrador';
         const adminPassword = '123456';
 
-        // Verificar si el usuario admin ya existe
+        // Busca si el usuario administrador ya existe en la base de datos
         let adminUser = await User.findOne({ username: adminUsername });
 
         if (adminUser) {
-            console.log(`Usuario '${adminUsername}' ya existe. Actualizando rol a 'admin' si es necesario.`);
+            // Si el usuario existe, se asegura de que tenga el rol 'admin' y actualiza la contraseña si es diferente
+            console.log(`Usuario '${adminUsername}' ya existe. Asegurando rol 'admin' y verificando contraseña.`);
             adminUser.role = 'admin';
-            // Si la contraseña cambia o quieres re-hashearla
+            
+            // Verifica si la contraseña actual del usuario coincide con la contraseña por defecto
             const isPasswordMatch = await bcrypt.compare(adminPassword, adminUser.password);
             if (!isPasswordMatch) {
+                // Hashea y actualiza la contraseña si no coincide
                 adminUser.password = await bcrypt.hash(adminPassword, 10);
             }
             await adminUser.save();
-            console.log(`✅ Usuario '${adminUsername}' actualizado.`);
+            console.log(`✅ Usuario '${adminUsername}' actualizado correctamente.`);
         } else {
-            // Crear nuevo usuario admin
+            // Si el usuario no existe, lo crea con el rol 'admin'
+            console.log(`Creando nuevo usuario administrador '${adminUsername}'.`);
             const hashedPassword = await bcrypt.hash(adminPassword, 10);
             adminUser = new User({
                 username: adminUsername,
@@ -37,18 +48,21 @@ const createAdminUser = async () => {
             console.log(`🎉 Usuario administrador '${adminUsername}' creado exitosamente.`);
         }
 
-        console.log(`---------------------------------------------------`);
-        console.log(`Para probar las funcionalidades de administrador:`);
-        console.log(`Username: ${adminUsername}`);
-        console.log(`Password: ${adminPassword}`);
-        console.log(`---------------------------------------------------`);
+        // Muestra las credenciales por consola para facilitar las pruebas
+        console.log(`\n---------------------------------------------------`);
+        console.log(`👉 Credenciales del Administrador (para pruebas):`);
+        console.log(`   Username: ${adminUsername}`);
+        console.log(`   Password: ${adminPassword}`);
+        console.log(`---------------------------------------------------\n`);
 
     } catch (error) {
-        console.error('❌ Error al crear usuario administrador:', error);
+        console.error('❌ Error al ejecutar el script de creación de administrador:', error);
     } finally {
+        // Asegura que la conexión a la base de datos se cierre al finalizar
         await mongoose.disconnect();
         console.log('Desconectado de MongoDB.');
     }
 };
 
+// Ejecuta la función principal del script
 createAdminUser();

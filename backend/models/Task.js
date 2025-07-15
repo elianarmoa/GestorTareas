@@ -2,30 +2,35 @@
 
 const mongoose = require('mongoose');
 
-// Definimos el esquema del documento (estructura de una tarea)
+// Define el esquema para el modelo de Tarea
 const taskSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true,
-        trim: true // elimina espacios al principio y final
+        required: [true, 'El título de la tarea es obligatorio.'], // Mensaje de error personalizado
+        trim: true // Elimina espacios en blanco al inicio y al final
+    },
+    description: { // Asumiendo que has añadido un campo de descripción en tu modelo de Task
+        type: String,
+        trim: true,
+        required: false // Opcional, dependiendo de tus requisitos
     },
     completed: {
         type: Boolean,
-        default: false
+        default: false // Las tareas se crean como no completadas por defecto
     },
-    userId: { // Este es el ID del usuario que creó la tarea
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Referencia al modelo de User
-        required: true
+        ref: 'User', // Establece una relación con el modelo 'User'
+        required: true // Indica que cada tarea debe estar asociada a un usuario
     },
-    category: { 
+    category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category', // Referencia al modelo de Category (que creamos en categoryModel.js)
-        required: false // Lo hacemos opcional por ahora. Si una tarea siempre debe tener categoría, cámbialo a true.
+        ref: 'Category', // Establece una relación con el modelo 'Category'
+        required: false // Una tarea puede existir sin categoría asignada inicialmente
     }
 }, {
-    timestamps: true // agrega automáticamente createdAt y updatedAt
+    timestamps: true // Añade automáticamente los campos 'createdAt' y 'updatedAt' para seguimiento
 });
 
-// Exportamos el modelo para usarlo en controladores
+// Exporta el modelo 'Task' para su uso en los controladores
 module.exports = mongoose.model('Task', taskSchema);

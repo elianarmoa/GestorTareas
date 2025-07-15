@@ -2,18 +2,22 @@
 
 .register-page-container {
     display: flex;
-    justify-content: center; /* Centra horizontalmente el contenido */
-    align-items: center; /* Centra verticalmente el contenido */
-    min-height: calc(100vh - var(--navbar-height, 60px)); /* Ocupa el espacio restante de la pantalla */
-    padding: var(--spacing-lg); /* Espaciado general alrededor */
-    background-color: var(--background-light); /* Fondo de la página, del tema global */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    /* Ocupa el espacio restante de la ventana, restando la altura de la barra de navegación */
+    min-height: calc(100vh - var(--navbar-height, 60px));
+    padding: var(--spacing-lg); /* Espaciado interno general del contenedor */
+    background-color: var(--background-light); /* Color de fondo de la página, adaptado al tema global */
 }
 
-/* El estilo de la tarjeta del formulario de registro se definirá en RegisterForm.css */
+/* Los estilos específicos de la tarjeta del formulario de registro se gestionan en `RegisterForm.css`.
+   Este archivo solo asegura el posicionamiento centrado del formulario en la página. */
 
 @media (max-width: 768px) {
     .register-page-container {
-        padding: var(--spacing-md);
-        /* align-items: flex-start; */ /* Opcional: alinear arriba en pantallas pequeñas */
+        padding: var(--spacing-md); /* Reduce el padding en pantallas más pequeñas */
+        /* Opcional: Para pantallas pequeñas, alinear el contenido en la parte superior puede ser preferible
+           en lugar de centrarlo verticalmente, dependiendo del diseño.
+           align-items: flex-start; */
     }
 }

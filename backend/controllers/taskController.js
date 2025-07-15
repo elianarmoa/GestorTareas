@@ -1,89 +1,97 @@
 // backend/controllers/taskController.js
 
-const Task = require('../models/Task'); // Ensure the path is correct
+const Task = require('../models/Task'); // Importa el modelo de Tarea
 
-// Obtener todas las tareas
+// --- Obtener todas las tareas del usuario autenticado ---
 const getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find({ userId: req.user.userId }) // Filter by authenticated user's ID
-                                .populate('category', 'name') // <--- ADDED POPULATE HERE! Fetch 'name' field of the category
-                                .sort({ createdAt: -1 }); // Optional: sort by creation date, most recent first
+        // Busca tareas que pertenezcan al usuario autenticado (req.user.userId)
+        // y popula el campo 'category' para incluir el nombre de la categoría.
+        const tasks = await Task.find({ userId: req.user.userId })
+                                .populate('category', 'name') // Carga solo el campo 'name' de la categoría
+                                .sort({ createdAt: -1 }); // Opcional: ordena las tareas por fecha de creación descendente
 
         res.status(200).json(tasks);
     } catch (err) {
-        console.error('Error al obtener las tareas:', err); // Added console.error for better debugging
-        res.status(500).json({ error: 'Error al obtener las tareas' });
+        console.error('Error al obtener las tareas:', err);
+        res.status(500).json({ error: 'Error interno del servidor al obtener las tareas.' });
     }
 };
 
-// Crear una nueva tarea
+// --- Crear una nueva tarea ---
 const createTask = async (req, res) => {
     try {
-        const { title, description, category } = req.body; // <--- ADDED 'description' (if applicable) and 'category'
+        const { title, description, category } = req.body;
 
+        // Valida que el título sea obligatorio.
         if (!title || title.trim() === '') {
-            return res.status(400).json({ error: 'El título es obligatorio' });
+            return res.status(400).json({ error: 'El título es obligatorio.' });
         }
 
+        // Crea una nueva instancia de tarea con los datos proporcionados.
+        // Asigna el ID del usuario autenticado y la ID de la categoría.
         const newTask = new Task({
             title: title.trim(),
-            description: description, // Assuming you have a 'description' field in Task model
-            userId: req.user.userId, // Assign authenticated user's ID to the task
-            category: category // <--- ASSIGN CATEGORY ID HERE
+            description: description,
+            userId: req.user.userId,
+            category: category // 'category' debe ser el ObjectId de una categoría existente
         });
 
         const savedTask = await newTask.save();
 
-        // Optional: Populate the category immediately after saving for the response
+        // Popula la categoría en la tarea recién guardada antes de enviarla como respuesta,
+        // para que el cliente reciba la información completa de la categoría.
         const populatedTask = await Task.findById(savedTask._id).populate('category', 'name');
 
-        res.status(201).json(populatedTask); // <--- Respond with the populated task
+        res.status(201).json(populatedTask);
     } catch (err) {
-        console.error('No se pudo crear la tarea:', err); // Added console.error for better debugging
-        res.status(500).json({ error: 'No se pudo crear la tarea' });
+        console.error('Error al crear la tarea:', err);
+        // Podría añadir una validación más específica si 'category' no es un ID válido.
+        res.status(500).json({ error: 'Error interno del servidor al crear la tarea.' });
     }
 };
 
-// Eliminar una tarea por ID
+// --- Eliminar una tarea por ID ---
 const deleteTask = async (req, res) => {
     try {
         const { id } = req.params;
-        // Find and delete the task, ensuring it belongs to the authenticated user
-        const deletedTask = await Task.findOneAndDelete({ _id: id, userId: req.user.userId }); // <--- ADDED userId check
+        // Busca y elimina la tarea, asegurándose de que pertenezca al usuario autenticado.
+        const deletedTask = await Task.findOneAndDelete({ _id: id, userId: req.user.userId });
 
         if (!deletedTask) {
-            // Changed error message to be more specific (not found OR not authorized)
+            // El mensaje indica si la tarea no existe o si el usuario no tiene permisos sobre ella.
             return res.status(404).json({ error: 'Tarea no encontrada o no tienes permiso para eliminarla.' });
         }
-        res.status(200).json({ message: 'Tarea eliminada' });
+        res.status(200).json({ message: 'Tarea eliminada exitosamente.' });
     } catch (err) {
-        console.error('Error al eliminar la tarea:', err); // Added console.error for better debugging
-        res.status(500).json({ error: 'Error al eliminar la tarea' });
+        console.error('Error al eliminar la tarea:', err);
+        res.status(500).json({ error: 'Error interno del servidor al eliminar la tarea.' });
     }
 };
 
-// Marcar una tarea como completada/incompleta (PATCH)
+// --- Alternar estado de tarea (completada/incompleta) ---
 const toggleTask = async (req, res) => {
     try {
         const { id } = req.params;
-        // Find the task, ensuring it belongs to the authenticated user
-        const task = await Task.findOne({ _id: id, userId: req.user.userId }); // <--- ADDED userId check
+        // Busca la tarea, asegurándose de que pertenezca al usuario autenticado.
+        const task = await Task.findOne({ _id: id, userId: req.user.userId });
 
         if (!task) {
-            // Changed error message to be more specific (not found OR not authorized)
+            // El mensaje indica si la tarea no existe o si el usuario no tiene permisos sobre ella.
             return res.status(404).json({ error: 'Tarea no encontrada o no tienes permiso para actualizarla.' });
         }
 
+        // Invierte el valor booleano de 'completed'.
         task.completed = !task.completed;
         await task.save();
 
-        // Optional: Populate the category after updating for the response
+        // Popula la categoría en la tarea actualizada antes de enviarla como respuesta.
         const populatedTask = await Task.findById(task._id).populate('category', 'name');
 
-        res.status(200).json(populatedTask); // <--- Respond with the populated task
+        res.status(200).json(populatedTask);
     } catch (err) {
-        console.error('Error al actualizar la tarea:', err); // Added console.error for better debugging
-        res.status(500).json({ error: 'Error al actualizar la tarea' });
+        console.error('Error al actualizar la tarea:', err);
+        res.status(500).json({ error: 'Error interno del servidor al actualizar la tarea.' });
     }
 };
 
