@@ -1,0 +1,16 @@
+# Node
+node_modules/
+npm-debug.log
+.nyc_output/
+*.log
+.DS_Store
+# Artefactos de construcción (compilaciones)
+dist/
+build/
+
+# Archivos específicos del IDE (entorno de desarrollo)
+.vscode/
+.idea/
+
+# Otros archivos a ignorar
+coverage/
