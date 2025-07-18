@@ -1,48 +1,54 @@
 /* frontend/src/pages/Home.css */
 
-.home-page-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra el contenido horizontalmente */
-    padding: var(--spacing-lg); /* Espaciado interno general de la página */
-    /* Ajusta la altura para ocupar el espacio restante de la ventana, excluyendo la altura de la navbar */
-    min-height: calc(100vh - var(--navbar-height, 60px));
-    background-color: var(--background-light); /* Color de fondo de la página, del tema global */
-    color: var(--text-dark); /* Color de texto principal, del tema global */
+.home-layout-container {
+    display: flex; /* Usa flexbox para el layout de dos columnas */
+    gap: var(--spacing-lg); /* Espacio entre el panel lateral y el contenido principal */
+    padding: var(--spacing-lg); /* Padding alrededor de todo el layout */
+    max-width: 1200px; /* Ancho máximo para el contenido */
+    margin: var(--spacing-lg) auto; /* Centra el layout en la página */
+    align-items: flex-start; /* Alinea los elementos al inicio (arriba) */
 }
 
-/* Contenedor principal para el contenido, actúa como una tarjeta */
-.home-content-card {
+/* El main-content-area ahora es el panel grande de la derecha */
+.main-content-area {
+    flex-grow: 1; /* Permite que este panel ocupe el espacio restante */
+    min-width: 0; /* Permite que el contenido se encoja si es necesario */
+    display: flex;
+    flex-direction: column; /* Organiza el título y TaskList verticalmente */
+    gap: var(--spacing-lg); /* Espacio entre el título y TaskList */
+}
+
+/* Estilos generales para los "paneles" (tarjetas) */
+.panel-card {
     background-color: var(--background-lighter); /* Fondo más claro para la tarjeta */
     padding: var(--spacing-xl); /* Espaciado interno de la tarjeta */
     border-radius: var(--border-radius-base); /* Bordes redondeados */
     box-shadow: var(--shadow-base); /* Sombra para dar profundidad visual */
-    width: 100%;
-    max-width: 800px; /* Ancho máximo para la tarjeta, optimizado para responsividad */
-    margin-top: var(--spacing-md); /* Margen superior para separarlo de elementos superiores (ej. título, navbar) */
     border: 1px solid var(--border-color); /* Borde sutil para la tarjeta */
-    text-align: center; /* Centra el texto dentro de la tarjeta por defecto */
 }
 
-.home-content-card h1 {
-    color: var(--primary-color); /* Color del título principal */
-    margin-bottom: var(--spacing-lg); /* Espacio debajo del título */
-    font-size: 2.2em;
-    font-weight: 700;
+.main-title {
+    color: var(--text-dark);
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 0; /* No necesitamos margen si hay gap en el padre */
+    width: 100%; /* Asegura que el título ocupe el ancho completo */
 }
 
 /* Media Queries para responsividad */
 @media (max-width: 768px) {
-    .home-page-container {
-        padding: var(--spacing-md); /* Reduce el padding general en pantallas más pequeñas */
+    .home-layout-container {
+        flex-direction: column; /* Apila los elementos verticalmente en pantallas pequeñas */
+        padding: var(--spacing-md);
+        margin: var(--spacing-md) auto;
     }
-    .home-content-card {
-        padding: var(--spacing-lg); /* Reduce el padding interno de la tarjeta */
-        max-width: 100%; /* Permite que la tarjeta ocupe todo el ancho disponible */
-        border-radius: 0; /* Opcional: Elimina los bordes redondeados en móviles para un diseño de borde a borde */
+
+    .main-title {
+        font-size: 2em;
     }
-    .home-content-card h1 {
-        font-size: 1.8em; /* Reduce el tamaño de la fuente del título */
-        margin-bottom: var(--spacing-md); /* Ajusta el margen inferior del título */
+
+    .panel-card {
+        padding: var(--spacing-lg);
+        border-radius: 0; /* Opcional: Elimina los bordes redondeados en móviles */
     }
 }

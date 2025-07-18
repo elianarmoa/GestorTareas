@@ -2,44 +2,68 @@
 
 .task-form {
     display: flex;
-    gap: var(--spacing-sm); /* Espacio entre el campo de entrada y el botón */
-    margin-bottom: var(--spacing-lg); /* Margen inferior para separar de la lista de tareas */
-    padding: var(--spacing-md);
-    background-color: var(--background-lighter); /* Color de fondo del formulario */
-    border-radius: var(--border-radius-base);
-    box-shadow: var(--shadow-base);
-    border: 1px solid var(--border-color);
-    box-sizing: border-box; /* Asegura que padding y borde se incluyan en el ancho/alto */
+    gap: var(--spacing-sm); /* Espacio entre los elementos del formulario */
+    margin-bottom: var(--spacing-lg); /* Espacio debajo del formulario */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
 }
 
-.task-form-input {
-    flex-grow: 1; /* Permite que el input ocupe el espacio restante */
-    /* Hereda estilos base de input desde App.css.
-       Puedes añadir sobrescrituras específicas aquí si es necesario. */
+.task-form-input,
+.task-form-select { /* Aplicar estilos similares al input y al select */
+    flex-grow: 1; /* Permite que ocupen el espacio disponible */
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: 1em;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+    outline: none; /* Elimina el contorno al enfocar */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    min-width: 150px; /* Asegura un ancho mínimo para ambos elementos */
+}
+
+.task-form-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.task-form-input:focus,
+.task-form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2); /* Sombra de enfoque */
 }
 
 .task-form-button {
-    /* Hereda estilos base de botón desde App.css.
-       Personaliza el color de fondo para el botón de agregar. */
-    background-color: var(--accent-color); /* Color de acento para el botón principal */
-    color: var(--text-light);
-    font-weight: 600;
     padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 1em;
+    font-weight: 600;
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
 }
 
 .task-form-button:hover {
-    background-color: var(--accent-hover-color); /* Color de fondo al pasar el mouse */
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
 }
 
 /* Media Queries para responsividad */
 @media (max-width: 600px) {
     .task-form {
-        flex-direction: column; /* Apila los elementos verticalmente en pantallas pequeñas */
-        gap: var(--spacing-sm);
-        padding: var(--spacing-sm);
+        flex-direction: column; /* Apila los elementos verticalmente */
+        align-items: stretch; /* Estira los elementos para ocupar el ancho completo */
     }
+
+    .task-form-input,
+    .task-form-select,
     .task-form-button {
-        width: 100%; /* El botón ocupa todo el ancho disponible */
-        padding: var(--spacing-sm); /* Ajusta el padding para dispositivos móviles */
+        width: 100%; /* Ocupan todo el ancho disponible */
+        margin-bottom: var(--spacing-sm); /* Espacio entre elementos apilados */
+    }
+
+    .task-form-button:last-child {
+        margin-bottom: 0; /* Elimina el margen inferior del último botón */
     }
 }

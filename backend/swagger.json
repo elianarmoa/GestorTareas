@@ -3,7 +3,15 @@
   "info": {
     "title": "Task Manager API",
     "version": "1.0.0",
-    "description": "Documentación completa de la API del Gestor de Tareas. **Nota: Los endpoints protegidos requieren un token JWT válido obtenido del login y, en algunos casos, roles específicos (ej. 'admin').**"
+    "description": "Documentación completa de la API del Gestor de Tareas. **Nota: Los endpoints protegidos requieren un token JWT válido obtenido del login y, en algunos casos, roles específicos (ej. 'admin').**",
+    "contact": {
+      "name": "Tu Nombre o Equipo",
+      "email": "tu_email@example.com"
+    },
+    "license": {
+      "name": "MIT License",
+      "url": "https://opensource.org/licenses/MIT"
+    }
   },
   "servers": [
     {
@@ -169,6 +177,48 @@
         "security": [
           { "bearerAuth": [] }
         ],
+        "parameters": [
+          {
+            "name": "completed",
+            "in": "query",
+            "description": "Filtra tareas por estado de completado.",
+            "schema": { "type": "boolean" },
+            "required": false,
+            "example": true
+          },
+          {
+            "name": "categoryId",
+            "in": "query",
+            "description": "Filtra tareas por ID de categoría.",
+            "schema": { "type": "string" },
+            "required": false,
+            "example": "65e8a6d6f2c7b8e1f0e4a1b4"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Término de búsqueda para filtrar tareas por título.",
+            "schema": { "type": "string" },
+            "required": false,
+            "example": "comprar"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Número de página para la paginación.",
+            "schema": { "type": "integer", "format": "int32", "minimum": 1 },
+            "required": false,
+            "example": 1
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Cantidad de tareas por página.",
+            "schema": { "type": "integer", "format": "int32", "minimum": 1, "maximum": 100 },
+            "required": false,
+            "example": 10
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de tareas.",
@@ -259,8 +309,8 @@
     "/api/tasks/{id}": {
       "patch": {
         "tags": ["Tareas"],
-        "summary": "Alternar el estado de una tarea (completada/incompleta)",
-        "description": "Actualiza el estado `completed` de una tarea específica por su ID. **Rol:** Autenticado",
+        "summary": "Actualizar parcialmente una tarea",
+        "description": "Actualiza uno o varios campos de una tarea específica por su ID. **Rol:** Autenticado",
         "security": [
           { "bearerAuth": [] }
         ],
@@ -276,9 +326,19 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskUpdate"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Estado de tarea actualizado.",
+            "description": "Tarea actualizada exitosamente.",
             "content": {
               "application/json": {
                 "schema": {
@@ -501,7 +561,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CategoryCreate"
+                "$ref": "#/components/schemas/CategoryUpdate"
               }
             }
           }
@@ -693,6 +753,15 @@
           "category": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b4", "description": "ID de la categoría a la que pertenece la tarea." }
         }
       },
+      "TaskUpdate": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string", "example": "Revisar y enviar informe mensual" },
+          "description": { "type": "string", "example": "Asegurar que todos los datos estén actualizados." },
+          "completed": { "type": "boolean", "example": true },
+          "category": { "type": "string", "example": "65e8a6d6f2c7b8e1f0e4a1b4", "description": "ID de la categoría a la que pertenece la tarea." }
+        }
+      },
       "Category": {
         "type": "object",
         "properties": {
@@ -707,6 +776,12 @@
         "required": ["name"],
         "properties": {
           "name": { "type": "string", "example": "Personal" }
+        }
+      },
+      "CategoryUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "Proyectos Personales" }
         }
       },
       "Error": {

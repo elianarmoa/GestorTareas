@@ -1,5 +1,3 @@
-// backend/routes/taskRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const taskController = require('../controllers/taskController');
@@ -19,6 +17,7 @@ router.post('/', authMiddleware, taskController.createTask);
 
 // GET /api/tasks
 // Obtiene todas las tareas que pertenecen al usuario autenticado.
+// Este endpoint ahora soporta paginación y búsqueda.
 router.get('/', authMiddleware, taskController.getAllTasks);
 
 // PATCH /api/tasks/:id
@@ -30,10 +29,5 @@ router.patch('/:id', authMiddleware, taskController.toggleTask);
 // Elimina una tarea específica por su ID.
 // Asegura que la tarea pertenezca al usuario autenticado.
 router.delete('/:id', authMiddleware, taskController.deleteTask);
-
-// NOTA: Si se necesitara un endpoint para tareas públicas (sin autenticación),
-// se debería crear una ruta separada (ej. `/api/public/tasks`)
-// con un controlador que no filtre por `userId`. Actualmente, todas las operaciones
-// de tareas están vinculadas al usuario autenticado.
 
 module.exports = router;

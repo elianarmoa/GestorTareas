@@ -56,6 +56,9 @@
     color: var(--text-dark);
     word-break: break-word; /* Asegura que las palabras largas se rompan para evitar desbordamiento */
     margin-right: var(--spacing-sm); /* Espacio entre el título y los botones de acción */
+    display: flex; /* Para alinear el título y el tag de categoría */
+    align-items: center;
+    gap: var(--spacing-xs); /* Espacio entre el título y el tag */
 }
 
 .task-title.completed {
@@ -63,6 +66,18 @@
     color: var(--text-secondary); /* Color más tenue para indicar completado */
     opacity: 0.8;
 }
+
+/* Estilo para el tag de categoría dentro del título de la tarea */
+.task-category-tag {
+    font-size: 0.8em;
+    background-color: var(--primary-color-light); /* Un color de fondo suave para el tag */
+    color: var(--primary-dark); /* Color de texto más oscuro para el tag */
+    padding: 0.2em 0.5em;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    white-space: nowrap; /* Evita que el tag se rompa en varias líneas */
+}
+
 
 .task-actions {
     display: flex;
@@ -95,6 +110,80 @@
     background-color: #c82333; /* Tono de rojo más oscuro al pasar el mouse */
 }
 
+/* --- Estilos para la barra de búsqueda y filtro de categoría --- */
+.filter-and-search-container {
+    display: flex;
+    gap: var(--spacing-sm); /* Espacio entre el select y el input */
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    justify-content: center; /* Centra los elementos */
+    padding: 0 var(--spacing-md); /* Padding horizontal para que no toque los bordes */
+}
+
+.search-input,
+.filter-category-select { /* Aplicar estilos similares al input y al select de filtro */
+    flex-grow: 1;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: 1em;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+    outline: none;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    min-width: 150px; /* Asegura un ancho mínimo para ambos */
+}
+
+.search-input::placeholder {
+    color: var(--text-secondary);
+}
+
+.search-input:focus,
+.filter-category-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+
+/* --- Estilos para los controles de paginación --- */
+.pagination-controls {
+    display: flex;
+    justify-content: center; /* Centra los botones de paginación */
+    align-items: center;
+    margin-top: var(--spacing-lg); /* Espacio superior para separar de la lista de tareas */
+    gap: var(--spacing-sm); /* Espacio entre los elementos de paginación */
+}
+
+.pagination-button {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 1em;
+    font-weight: 500;
+    background-color: var(--primary-color); /* Color de acento para los botones */
+    color: var(--text-light);
+    border: none;
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: var(--primary-dark); /* Tono más oscuro al pasar el mouse */
+}
+
+.pagination-button:disabled {
+    background-color: var(--background-secondary); /* Color para botones deshabilitados */
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pagination-controls span {
+    font-size: 1em;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+
 /* Media Queries para responsividad */
 @media (max-width: 600px) {
     .task-list-item {
@@ -114,5 +203,34 @@
     .task-button {
         width: auto; /* Permite que los botones tengan su ancho natural */
         flex-grow: 1; /* Permite que los botones se estiren para llenar el espacio disponible */
+    }
+
+    /* Ajustes específicos para la barra de búsqueda y filtro en pantallas pequeñas */
+    .filter-and-search-container {
+        flex-direction: column; /* Apila los elementos */
+        align-items: stretch; /* Estira los elementos para ocupar el ancho completo */
+    }
+    .search-input,
+    .filter-category-select {
+        width: 100%; /* Ocupan todo el ancho disponible */
+        margin-bottom: var(--spacing-sm); /* Espacio entre elementos apilados */
+    }
+    .filter-category-select {
+        margin-bottom: var(--spacing-sm); /* Asegura espacio si el input es el último */
+    }
+
+    /* Ajustes específicos para la paginación en pantallas pequeñas */
+    .pagination-controls {
+        flex-wrap: wrap; /* Permite que los elementos se envuelvan si no caben */
+        justify-content: center;
+    }
+    .pagination-button {
+        flex-basis: 45%; /* Los botones ocupan casi la mitad del ancho */
+        margin-bottom: var(--spacing-xs); /* Espacio entre botones apilados */
+    }
+    .pagination-controls span {
+        flex-basis: 100%; /* El texto de la página ocupa todo el ancho */
+        text-align: center;
+        margin-bottom: var(--spacing-xs);
     }
 }

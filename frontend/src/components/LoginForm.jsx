@@ -14,8 +14,7 @@ import './LoginForm.css';
  * y muestra mensajes de éxito o error.
  */
 function LoginForm() {
-    // Obtiene `setAuth` del contexto de autenticación para actualizar el estado global.
-    const { setAuth } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     // Hook para la navegación programática.
     const navigate = useNavigate();
 
@@ -40,12 +39,11 @@ function LoginForm() {
                 username,
                 password
             });
-
-            // Si el login es exitoso, actualiza el contexto de autenticación con el usuario y el token.
-            setAuth({
-                user: username,
-                token: res.data.token,
-                role: res.data.role // Asegúrate de que el backend envíe el rol
+            // Asegúrate de que tu backend devuelve { token: '...', role: '...' }
+            // Y que el 'user' en AuthContext espera un objeto con 'username' y 'role'.
+            login(res.data.token, {
+                username: username, // Puedes usar el username ingresado o el devuelto por el backend si lo envía en res.data.user
+                role: res.data.role // Esto asume que 'role' viene directamente en res.data
             });
 
             setMessage('Inicio de sesión exitoso. Redirigiendo...');
@@ -57,6 +55,7 @@ function LoginForm() {
 
         } catch (err) {
             // Maneja errores: extrae el mensaje del backend o usa un mensaje genérico.
+            // Esto se ejecutará si el backend no devuelve un 2xx o si hay un problema de red.
             const errorMessage = err.response?.data?.error || 'Error en el inicio de sesión. Credenciales incorrectas.';
             setMessage(errorMessage);
             setIsError(true);

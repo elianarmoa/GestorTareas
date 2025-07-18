@@ -1,6 +1,6 @@
 // backend/controllers/categoryController.js
 
-const Category = require('../models/categoryModel'); // Asegurarse de que la ruta al modelo sea correcta
+const Category = require('../models/categoryModel'); 
 
 // --- Crea una nueva categoría ---
 const createCategory = async (req, res) => {
@@ -10,17 +10,20 @@ const createCategory = async (req, res) => {
         if (!name) {
             return res.status(400).json({ message: 'El nombre de la categoría es requerido.' });
         }
+        // Normaliza el nombre solo para eliminar espacios en blanco al inicio/final,
+        // pero mantiene la capitalización original.
+        const trimmedName = name.trim(); 
 
-        // Normaliza el nombre para evitar duplicados por diferencias de mayúsculas/minúsculas o espacios.
-        const normalizedName = name.toLowerCase().trim();
-
-        // Verifica si ya existe una categoría con el nombre normalizado.
-        const existingCategory = await Category.findOne({ name: normalizedName });
+        // Verifica si ya existe una categoría con el nombre normalizado (insensible a mayúsculas/minúsculas para la verificación)
+        // Usamos una expresión regular para buscar de forma insensible a mayúsculas/minúsculas para la unicidad,
+        // pero guardamos el nombre con la capitalización original.
+        const existingCategory = await Category.findOne({ name: { $regex: new RegExp(`^${trimmedName}$`, 'i') } });
         if (existingCategory) {
             return res.status(409).json({ message: 'La categoría ya existe.' });
         }
 
-        const newCategory = new Category({ name: normalizedName });
+        // Guarda la categoría con el nombre tal cual fue ingresado (después de trim)
+        const newCategory = new Category({ name: trimmedName });
         await newCategory.save();
 
         res.status(201).json({ message: 'Categoría creada exitosamente.', category: newCategory });
@@ -51,18 +54,20 @@ const updateCategory = async (req, res) => {
             return res.status(400).json({ message: 'El nuevo nombre de la categoría es requerido.' });
         }
 
-        const normalizedName = name.toLowerCase().trim();
+        const trimmedName = name.trim();
 
         // Evita que se actualice una categoría con un nombre que ya existe en otra categoría.
-        const existingCategory = await Category.findOne({ name: normalizedName });
+        // Usamos una expresión regular para buscar de forma insensible a mayúsculas/minúsculas para la unicidad,
+        // pero guardamos el nombre con la capitalización original.
+        const existingCategory = await Category.findOne({ name: { $regex: new RegExp(`^${trimmedName}$`, 'i') } });
         if (existingCategory && existingCategory._id.toString() !== id) {
             return res.status(409).json({ message: 'Ya existe otra categoría con ese nombre.' });
         }
 
         const updatedCategory = await Category.findByIdAndUpdate(
             id,
-            { name: normalizedName },
-            { new: true, runValidators: true } // 'new: true' para devolver el documento actualizado; 'runValidators' asegura que se apliquen las reglas del esquema.
+            { name: trimmedName }, // Guarda el nombre con la capitalización original
+            { new: true, runValidators: true }
         );
 
         if (!updatedCategory) {
@@ -87,16 +92,7 @@ const deleteCategory = async (req, res) => {
             return res.status(404).json({ message: 'Categoría no encontrada.' });
         }
 
-        // NOTA: Al eliminar una categoría, las tareas que la referencian quedarán
-        // con una referencia inválida (o nula). En una aplicación más compleja,
-        // se podría considerar:
-        // - Desvincular automáticamente las tareas (ej. CategoryId = null).
-        // - Prevenir la eliminación si hay tareas asociadas.
-        // - Eliminar en cascada las tareas (usar con precaución).
-        // Para este proyecto, se asume que el frontend o el usuario manejará la inconsistencia
-        // o que las tareas no se eliminarán en cascada.
-
-        res.status(200).json({ message: 'Categoría eliminada exitosamente.' });
+        res.status(200).json({ message: 'Tarea eliminada exitosamente.' });
     } catch (error) {
         console.error('Error al eliminar categoría:', error);
         res.status(500).json({ message: 'Error interno del servidor al eliminar la categoría.' });

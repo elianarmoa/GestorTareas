@@ -1,39 +1,37 @@
-import { useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// frontend/src/pages/Home.jsx
+
+import React, { useState, useContext } from 'react';
+import TaskList from '../components/TaskList'; 
+import CategoryPanel from '../components/CategoryPanel';
 import { AuthContext } from '../context/AuthContext';
-import TaskList from '../components/TaskList';
 import './Home.css';
 
-/**
- * Componente Home.
- * Representa la página principal de la aplicación, que muestra la lista de tareas.
- * Redirige al usuario a la página de login si no está autenticado.
- */
 function Home() {
-    // Obtiene el objeto de autenticación del contexto.
     const { auth } = useContext(AuthContext);
-    // Hook para la navegación programática.
-    const navigate = useNavigate();
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [allCategories, setAllCategories] = useState([]);
 
-    /**
-     * Hook useEffect para verificar el estado de autenticación.
-     * Si el usuario no tiene un token (no está autenticado), lo redirige a la página de login.
-     * Se ejecuta cada vez que 'auth' o 'navigate' cambian.
-     */
-    useEffect(() => {
-        if (!auth || !auth.token) {
-            navigate('/login');
-        }
-    }, [auth, navigate]); // Dependencias: se re-ejecuta si 'auth' o 'navigate' cambian.
+    if (!auth.token) {
+        return null;
+    }
 
     return (
-        <div className="home-page-container">
-            {/* Título principal de la página */}
-            <h1 className="home-content-card h1">Gestor de tareas</h1>
-            {/* Contenedor principal de la tarjeta de tareas */}
-            <div className="home-content-card">
-                {/* Renderiza el componente TaskList que muestra y gestiona las tareas */}
-                <TaskList />
+        <div className="home-layout-container">
+            {/* Panel de Categorías (Lateral Izquierdo) */}
+            <CategoryPanel
+                onSelectCategory={setSelectedCategory}
+                selectedCategory={selectedCategory}
+                onCategoriesLoaded={setAllCategories}
+            />
+
+            {/* Contenedor Principal de Tareas (Panel Grande a la Derecha) */}
+            {/* Este div actuará como la "tarjeta" principal del lado derecho */}
+            <div className="main-content-area panel-card"> 
+                <h1 className="main-title">Gestor de Tareas</h1> 
+                <TaskList
+                    selectedFilterCategory={selectedCategory}
+                    categories={allCategories} // Pasa las categorías a TaskList (para TaskForm dentro)
+                />
             </div>
         </div>
     );
